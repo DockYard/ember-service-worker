@@ -1,26 +1,16 @@
-# Ember-service-worker
+# Ember Service Worker - WIP
 
-This README outlines the details of collaborating on this Ember addon.
+_A pluggable approach to Service Workers for Ember.js_
+
+## Batteries excluded
+
+Without any extra addons all this addon does is install a Service Worker, 
+but the Service Worker itself will do nothing.
+This allows you to craft a set of addons that make the Service Worker function the way you want it to.
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+```
+ember install ember-service-worker
+```
 
-## Running
-
-* `ember server`
-* Visit your app at http://localhost:4200.
-
-## Running Tests
-
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
-
-## Building
-
-* `ember build`
-
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
