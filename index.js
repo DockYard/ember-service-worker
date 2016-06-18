@@ -39,7 +39,7 @@ module.exports = {
                 (function() {
                   var serviceWorkers = [${pluginNames}];
                   ${functionBody}
-                });
+                })();
               </script>`;
     }
   },
