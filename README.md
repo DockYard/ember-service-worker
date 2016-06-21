@@ -1,26 +1,58 @@
-# Ember-service-worker
+# Ember Service Worker - WIP
 
-This README outlines the details of collaborating on this Ember addon.
+_A pluggable approach to Service Workers for Ember.js_
+
+## Batteries excluded
+
+Without any extra addons all this addon does is install a Service Worker,
+but the Service Worker itself will do nothing.
+This allows you to craft a set of addons that make the Service Worker function the way you want it to.
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+```
+ember install ember-service-worker
+```
 
-## Running
+## Available plugins
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+- [ember-service-worker-asset-cache](https://github.com/DockYard/ember-service-worker-asset-cache)
 
-## Running Tests
+## Authoring plugins
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+To create an Ember Service Worker plugin, you first need to add the
+`ember-service-worker-plugin` keyword to the `keywords` option in the plugin's
+`package.json`
 
-## Building
+Then create a file with the same name as your Ember Service Worker plugin within
+the `service-worker` folder that should be in the root of your addon. For
+example: `service-worker/ember-service-worker-asset-cache.js`. This file will
+automatically be loaded by the created service worker.
 
-* `ember build`
+All other files in the `service-worker` will also be copied to your build of the
+application. This enables you to use `importScript` to load additional files.
 
-For more information on using ember-cli, visit [http://ember-cli.com/](http://ember-cli.com/).
+All the plugins have the `VERSION` constant available to them. This is a
+timestamp and will change on every rebuild of `sw.js`.
+
+## Authors
+
+* [Marten Schilstra](http://twitter.com/martndemus)
+
+## Versioning
+
+This library follows [Semantic Versioning](http://semver.org)
+
+## Want to help?
+
+Please do! We are always looking to improve this library. Please see our
+[Contribution Guidelines](https://github.com/dockyard/ember-service-worker/blob/master/CONTRIBUTING.md)
+on how to properly submit issues and pull requests.
+
+## Legal
+
+[DockYard](http://dockyard.com/), Inc. &copy; 2016
+
+[@dockyard](http://twitter.com/dockyard)
+
+[Licensed under the MIT license](http://www.opensource.org/licenses/mit-license.php)
