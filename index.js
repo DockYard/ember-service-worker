@@ -4,15 +4,33 @@
 const fs = require('fs');
 const path = require('path');
 const mergeTrees = require('broccoli-merge-trees');
+const writeFile = require('broccoli-file-creator');
 const Funnel = require('broccoli-funnel');
 
 module.exports = {
   name: 'ember-service-worker',
 
+  included: function(app) {
+    this._super.included && this._super.included.apply(this, arguments);
+    this.app = app;
+    this.app.options = this.app.options || {};
+    this.app.options.fingerprint = this.app.options.fingerprint || {};
+    this.app.options.fingerprint.exclude = this.app.options.fingerprint.exclude || [];
+    this.app.options.fingerprint.exclude.push('sw.js');
+  },
+
   postprocessTree(type, tree) {
     if (type === 'all') {
       let plugins = this._findPluginsFor(this);
-      let trees = [tree];
+
+      let pluginFileNames = plugins
+        .map((plugin) => `'${plugin.name}.js'`)
+        .join(', ');
+      let swjs = writeFile('sw.js', `
+        const VERSION = ${+new Date()};
+        self.importScripts(${plugins.length ? pluginFileNames : ''});
+      `);
+      let trees = [tree, swjs];
 
       plugins.forEach((plugin) => {
         let pluginTreePath = path.resolve(plugin.root, 'service-worker');
@@ -29,18 +47,8 @@ module.exports = {
 
   contentFor(type, config) {
     if (type === 'body-footer' && config.environment !== 'test') {
-      let plugins = this._findPluginsFor(this);
-      let pluginNames = plugins
-        .map((plugin) => `'${plugin.name}'`)
-        .join(',');
       let functionBody = fs.readFileSync('./lib/registration.js');
-
-      return `<script>
-                (function() {
-                  var serviceWorkers = [${pluginNames}];
-                  ${functionBody}
-                })();
-              </script>`;
+      return `<script>${functionBody}</script>`;
     }
   },
 
