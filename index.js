@@ -21,7 +21,7 @@ module.exports = {
 
   postprocessTree(type, tree) {
     if (type === 'all') {
-      let plugins = this._findPluginsFor(this);
+      let plugins = this._findPluginsFor(this.project);
 
       let pluginFileNames = plugins
         .map((plugin) => `'${plugin.name}.js'`)
