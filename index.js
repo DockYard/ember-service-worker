@@ -47,7 +47,7 @@ module.exports = {
 
   contentFor(type, config) {
     if (type === 'body-footer' && config.environment !== 'test') {
-      let functionBody = fs.readFileSync('./lib/registration.js');
+      let functionBody = fs.readFileSync(path.join(this.root, 'lib/registration.js'));
       return `<script>${functionBody}</script>`;
     }
   },
