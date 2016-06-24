@@ -24,11 +24,10 @@ module.exports = {
       let plugins = this._findPluginsFor(this.project);
       let pluginFileNames = plugins
         .map((plugin) => `'${plugin.name}.js'`)
-        .concat('ember-service-worker.js')
         .join(', ');
       let swjsTree = writeFile('sw.js', `
         const VERSION = ${+new Date()};
-        self.importScripts(${plugins.length ? pluginFileNames : ''});
+        self.importScripts('ember-service-worker.js', ${plugins.length ? pluginFileNames : ''});
       `);
       let middlewareTree = this.treeGenerator(path.resolve(this.root, 'service-worker'));
       let trees = [tree, swjsTree, middlewareTree];
