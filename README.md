@@ -1,4 +1,4 @@
-# Ember Service Worker - WIP
+# Ember Service Worker
 
 _A pluggable approach to Service Workers for Ember.js_
 
@@ -17,6 +17,10 @@ ember install ember-service-worker
 ## Available plugins
 
 - [ember-service-worker-asset-cache](https://github.com/DockYard/ember-service-worker-asset-cache)
+- [ember-service-worker-cache-first](https://github.com/DockYard/ember-service-worker-cache-first)
+- [ember-service-worker-cache-fallback](https://github.com/DockYard/ember-service-worker-cache-fallback)
+
+_Created a plugin? Submit a PR to add a link yours here!_
 
 ## Authoring plugins
 

@@ -11,7 +11,7 @@
     "start": "ember server",
     "test": "mocha node-tests --ui qunit"
   },
-  "repository": "",
+  "repository": "https://github.com/DockYard/ember-service-worker",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -41,7 +41,9 @@
     "mocha": "^2.5.3"
   },
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "ember-service-worker",
+    "service worker"
   ],
   "dependencies": {
     "broccoli-file-creator": "^1.1.0",
