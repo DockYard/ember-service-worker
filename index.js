@@ -22,15 +22,16 @@ module.exports = {
   postprocessTree(type, tree) {
     if (type === 'all') {
       let plugins = this._findPluginsFor(this.project);
-
       let pluginFileNames = plugins
         .map((plugin) => `'${plugin.name}.js'`)
+        .concat('ember-service-worker.js')
         .join(', ');
-      let swjs = writeFile('sw.js', `
+      let swjsTree = writeFile('sw.js', `
         const VERSION = ${+new Date()};
         self.importScripts(${plugins.length ? pluginFileNames : ''});
       `);
-      let trees = [tree, swjs];
+      let middlewareTree = this.treeGenerator(path.resolve(this.root, 'service-worker'));
+      let trees = [tree, swjsTree, middlewareTree];
 
       plugins.forEach((plugin) => {
         let pluginTreePath = path.resolve(plugin.root, 'service-worker');
