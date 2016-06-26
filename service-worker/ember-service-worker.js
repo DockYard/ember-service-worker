@@ -27,6 +27,14 @@
     event.respondWith(new Promise(resolver));
   });
 
+  self.addEventListener('install', function installEventListenerCallback(event) {
+    return self.skipWaiting();
+  });
+
+  self.addEventListener('activate', function installEventListenerCallback(event) {
+    return self.clients.claim();
+  });
+
   self.addFetchListener = function addFetchListener(handler) {
     FETCH_HANDLERS.push(handler);
   };
