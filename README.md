@@ -33,7 +33,7 @@ the `service-worker` folder that should be in the root of your addon. For
 example: `service-worker/ember-service-worker-asset-cache.js`. This file will
 automatically be loaded by the created service worker.
 
-All other files in the `service-worker` will also be copied to your build of the
+All other files in the `service-worker` directory will also be copied to your build of the
 application. This enables you to use `importScript` to load additional files.
 
 All the plugins have the `VERSION` constant available to them. This is a
