@@ -9,7 +9,8 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "mocha node-tests --ui qunit"
+    "test": "mocha node-tests --ui qunit",
+    "ember-test": "ember try:each"
   },
   "repository": "https://github.com/DockYard/ember-service-worker",
   "engines": {
@@ -52,6 +53,9 @@
     "ember-cli-babel": "^5.1.6"
   },
   "ember-addon": {
-    "configPath": "tests/dummy/config"
+    "configPath": "tests/dummy/config",
+    "versionCompatibility": {
+       "ember": ">1.13.0 <3.0.0"
+    }
   }
 }
