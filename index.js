@@ -1,11 +1,11 @@
 /* jshint node: true */
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const mergeTrees = require('broccoli-merge-trees');
-const writeFile = require('broccoli-file-creator');
-const Funnel = require('broccoli-funnel');
+var fs = require('fs');
+var path = require('path');
+var mergeTrees = require('broccoli-merge-trees');
+var writeFile = require('broccoli-file-creator');
+var Funnel = require('broccoli-funnel');
 
 module.exports = {
   name: 'ember-service-worker',
@@ -19,22 +19,22 @@ module.exports = {
     this.app.options.fingerprint.exclude.push('sw.js');
   },
 
-  postprocessTree(type, tree) {
+  postprocessTree: function(type, tree) {
     if (type === 'all') {
-      let plugins = this._findPluginsFor(this.project);
-      let pluginFileNames = plugins
-        .map((plugin) => `'${plugin.name}.js'`)
+      var plugins = this._findPluginsFor(this.project);
+      var pluginFileNames = plugins
+        .map(function(plugin) { `'${plugin.name}.js'`})
         .join(', ');
-      let swjsTree = writeFile('sw.js', `
-        const VERSION = ${+new Date()};
-        self.importScripts('ember-service-worker.js', ${plugins.length ? pluginFileNames : ''});
-      `);
-      let middlewareTree = this.treeGenerator(path.resolve(this.root, 'service-worker'));
-      let trees = [tree, swjsTree, middlewareTree];
+      var swjsTemplate =
+        'var VERSION = ' + (+new Date()) + ';' +
+        'self.importScripts(\'ember-service-worker.js\'' + (plugins.length ? ', ' + pluginFileNames : '') + ');'
+      var swjsTree = writeFile('sw.js', swjsTemplate);
+      var middlewareTree = this.treeGenerator(path.resolve(this.root, 'service-worker'));
+      var trees = [tree, swjsTree, middlewareTree];
 
-      plugins.forEach((plugin) => {
-        let pluginTreePath = path.resolve(plugin.root, 'service-worker');
-        let pluginTree = plugin.treeGenerator(pluginTreePath);
+      plugins.forEach(function(plugin) {
+        var pluginTreePath = path.resolve(plugin.root, 'service-worker');
+        var pluginTree = plugin.treeGenerator(pluginTreePath);
 
         trees.push(pluginTree);
       });
@@ -45,18 +45,19 @@ module.exports = {
     return tree;
   },
 
-  contentFor(type, config) {
+  contentFor: function(type, config) {
     if (type === 'body-footer' && config.environment !== 'test') {
-      let functionBody = fs.readFileSync(path.join(this.root, 'lib/registration.js'));
-      return `<script>${functionBody}</script>`;
+      var functionBody = fs.readFileSync(path.join(this.root, 'lib/registration.js'));
+      return '<script>' + functionBody + '</script>';
     }
   },
 
-  _findPluginsFor(project) {
+  _findPluginsFor: function(project) {
+    var self = this;
     var plugins = [];
 
-    (project.addons || []).forEach((addon) => {
-      if (this._addonHasKeyword(addon, 'ember-service-worker-plugin')) {
+    (project.addons || []).forEach(function(addon) {
+      if (self._addonHasKeyword(addon, 'ember-service-worker-plugin')) {
         plugins.push(addon);
       }
     });
@@ -64,7 +65,7 @@ module.exports = {
     return plugins;
   },
 
-  _addonHasKeyword(addon, keyword) {
+  _addonHasKeyword: function(addon, keyword) {
     var keywords = addon.pkg.keywords;
     return keywords.indexOf(keyword) > -1;
   }
