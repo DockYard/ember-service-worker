@@ -1,6 +1,6 @@
 {
   "name": "ember-service-worker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
@@ -55,7 +55,7 @@
   "ember-addon": {
     "configPath": "tests/dummy/config",
     "versionCompatibility": {
-       "ember": ">1.13.0 <3.0.0"
+      "ember": ">1.13.0 <3.0.0"
     }
   }
 }
