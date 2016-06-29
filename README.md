@@ -2,6 +2,8 @@
 
 _A pluggable approach to Service Workers for Ember.js_
 
+[![Ember Observer Score](https://emberobserver.com/badges/ember-service-worker.svg)](https://emberobserver.com/addons/ember-service-worker)
+
 ## Batteries excluded
 
 Without any extra addons all this addon does is install a Service Worker,
