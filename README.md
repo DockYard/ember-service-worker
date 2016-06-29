@@ -3,6 +3,7 @@
 _A pluggable approach to Service Workers for Ember.js_
 
 [![Ember Observer Score](https://emberobserver.com/badges/ember-service-worker.svg)](https://emberobserver.com/addons/ember-service-worker)
+[![Build Status](https://travis-ci.org/DockYard/ember-service-worker.svg?branch=master)](https://travis-ci.org/DockYard/ember-service-worker)
 
 ## Batteries excluded
 
