@@ -42,6 +42,13 @@ application. This enables you to use `importScript` to load additional files.
 All the plugins have the `VERSION` constant available to them. This is a
 timestamp and will change on every rebuild of `sw.js`.
 
+## Adding Service Worker code directly to your app
+
+It is also possible to add service worker code to your app directly. To do this
+add a folder called `service-worker` to the root your project and then create a
+`.js` file with the name of your project. I.e.: `service-worker/my-project.js`.
+This works exactly as authoring plugins.
+
 ## Authors
 
 * [Marten Schilstra](http://twitter.com/martndemus)
