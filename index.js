@@ -23,7 +23,7 @@ module.exports = {
     if (type === 'all') {
       var plugins = this._findPluginsFor(this.project);
       var pluginFileNames = plugins
-        .map(function(plugin) { `'${plugin.name}.js'`})
+        .map(function(plugin) { return `'${plugin.name}.js'`})
         .join(', ');
       var swjsTemplate =
         'var VERSION = ' + (+new Date()) + ';' +
