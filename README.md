@@ -20,7 +20,7 @@ ember install ember-service-worker
 - [ember-service-worker-cache-first](https://github.com/DockYard/ember-service-worker-cache-first)
 - [ember-service-worker-cache-fallback](https://github.com/DockYard/ember-service-worker-cache-fallback)
 
-_Created a plugin? Submit a PR to add a link yours here!_
+For a full list of available Ember Service Worker plugins: [click here](https://npmsearch.com/?q=keywords:ember-cli-deploy-plugin)
 
 ## Authoring plugins
 
