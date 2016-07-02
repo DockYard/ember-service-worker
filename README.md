@@ -42,6 +42,21 @@ application. This enables you to use `importScript` to load additional files.
 All the plugins have the `VERSION` constant available to them. This is a
 timestamp and will change on every rebuild of `sw.js`.
 
+### API
+
+To make addons simple and pluggable, some middleware has been added.
+
+#### `addFetchListener`
+
+If you want to listen for `fetch` in your addon, you will need to register this
+through the `addFetchListener` function. This expects a callback function which
+receives the event as argument, just as the callback to
+`addEventListener('fetch', ...)` does. It expects the callback to return a
+Promise that resolves to a response or `undefined`. If the response is undefined
+the next `fetch` handler that has been registered will be called, otherwise the
+response from the promise will be used and no further `fetch` handlers will be
+called.
+
 ## Adding Service Worker code directly to your app
 
 It is also possible to add service worker code to your app directly. To do this
