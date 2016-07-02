@@ -1,6 +1,6 @@
 {
   "name": "ember-service-worker",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
