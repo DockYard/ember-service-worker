@@ -21,25 +21,31 @@ module.exports = {
 
   postprocessTree: function(type, tree) {
     if (type === 'all') {
+      var self = this;
       var plugins = this._findPluginsFor(this.project);
-      var pluginFileNames = plugins
-        .map(function(plugin) { return `'${plugin.name}.js'`})
-        .join(', ');
-      var swjsTemplate =
-        'var VERSION = ' + (+new Date()) + ';' +
-        'self.importScripts(\'ember-service-worker.js\'' + (plugins.length ? ', ' + pluginFileNames : '') + ');'
-      var swjsTree = writeFile('sw.js', swjsTemplate);
-      var middlewareTree = this.treeGenerator(path.resolve(this.root, 'service-worker'));
-      var trees = [tree, swjsTree, middlewareTree];
+      var pluginFileNames = [];
+
+      var trees = [tree];
+
+      plugins = [this].concat(plugins, this.project);
 
       plugins.forEach(function(plugin) {
-        var pluginTreePath = path.resolve(plugin.root, 'service-worker');
-        var pluginTree = plugin.treeGenerator(pluginTreePath);
+        var pluginTree = self._serviceWorkerTreeFor(plugin);
+        var pluginName = plugin.pkg.name || plugin.name;
 
-        trees.push(pluginTree);
+        if (pluginTree) {
+          trees.push(pluginTree);
+          pluginFileNames.push('\'' + pluginName + '.js\'');
+        }
       });
 
-      return mergeTrees(trees);
+      var swjsTemplate =
+        'var VERSION = ' + (+new Date()) + ';' +
+        'self.importScripts(' + pluginFileNames.join(',') + ');'
+
+      trees.push(writeFile('sw.js', swjsTemplate));
+
+      return mergeTrees(trees, { overwrite: true });
     }
 
     return tree;
@@ -49,6 +55,14 @@ module.exports = {
     if (type === 'body-footer' && config.environment !== 'test') {
       var functionBody = fs.readFileSync(path.join(this.root, 'lib/registration.js'));
       return '<script>' + functionBody + '</script>';
+    }
+  },
+
+  _serviceWorkerTreeFor: function(project) {
+    var projectPath = path.resolve(project.root, 'service-worker');
+
+    if (fs.existsSync(projectPath)) {
+      return this.treeGenerator(projectPath);
     }
   },
 
