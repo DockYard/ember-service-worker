@@ -5,7 +5,8 @@ var fs = require('fs');
 var path = require('path');
 var mergeTrees = require('broccoli-merge-trees');
 var writeFile = require('broccoli-file-creator');
-var Funnel = require('broccoli-funnel');
+var Babel = require('broccoli-babel-transpiler');
+var getBabelOptions = require('./lib/get-babel-options');
 
 module.exports = {
   name: 'ember-service-worker',
@@ -62,7 +63,7 @@ module.exports = {
     var projectPath = path.resolve(project.root, 'service-worker');
 
     if (fs.existsSync(projectPath)) {
-      return this.treeGenerator(projectPath);
+      return Babel(this.treeGenerator(projectPath), getBabelOptions(project));
     }
   },
 
