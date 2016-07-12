@@ -49,10 +49,13 @@
   "dependencies": {
     "broccoli-babel-transpiler": "^5.5.0",
     "broccoli-file-creator": "^1.1.0",
-    "broccoli-funnel": "^1.0.1",
+    "broccoli-funnel": "^1.0.3",
     "broccoli-merge-trees": "1.1.1",
+    "broccoli-rollup": "0.0.4",
     "clone": "^1.0.2",
-    "ember-cli-babel": "^5.1.6"
+    "ember-cli-babel": "^5.1.6",
+    "exists-sync": "0.0.3",
+    "rollup-plugin-replace": "^1.1.1"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config",

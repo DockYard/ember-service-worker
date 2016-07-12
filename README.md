@@ -35,16 +35,11 @@ To create an Ember Service Worker plugin, you first need to add the
 `ember-service-worker-plugin` keyword to the `keywords` option in the plugin's
 `package.json`
 
-Then create a file with the same name as your Ember Service Worker plugin within
-the `service-worker` folder that should be in the root of your addon. For
-example: `service-worker/ember-service-worker-asset-cache.js`. This file will
+Then create an `service-worker/index.js` file within in the root of your addon. This file will
 automatically be loaded by the created service worker.
 
-All other files in the `service-worker` directory will also be copied to your build of the
-application. This enables you to use `importScript` to load additional files.
-
-All the plugins have the `VERSION` constant available to them. This is a
-timestamp and will change on every rebuild of `sw.js`.
+Other files in the `service-worker` file are available for `import` via standard ES6 module
+semantics.
 
 ### API
 
@@ -61,11 +56,39 @@ the next `fetch` handler that has been registered will be called, otherwise the
 response from the promise will be used and no further `fetch` handlers will be
 called.
 
+Example:
+
+```js
+import { addFetchListener } from 'ember-service-worker/service-worker';
+
+addFetchListener(function() {
+  // special sauce here
+});
+```
+
+#### `VERSION`
+
+This is a constant that you can utilize which is updated for every build of the
+service worker. You could use this as part of the cache key:
+
+```js
+import { VERSION } from 'ember-service-worker/service-worker';
+
+var CACHE_NAME = 'asset-cache-' + VERSION;
+self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(function(cache) {
+        // more stuff here
+      })
+  );
+});
+```
+
 ## Adding Service Worker code directly to your app
 
 It is also possible to add service worker code to your app directly. To do this
-add a folder called `service-worker` to the root your project and then create a
-`.js` file with the name of your project. I.e.: `service-worker/my-project.js`.
+add a `service-worker/index.js` file in the root of your project.
 This works exactly as authoring plugins.
 
 ## Authors
