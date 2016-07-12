@@ -5,6 +5,10 @@ _A pluggable approach to Service Workers for Ember.js_
 [![Ember Observer Score](https://emberobserver.com/badges/ember-service-worker.svg)](https://emberobserver.com/addons/ember-service-worker)
 [![Build Status](https://travis-ci.org/DockYard/ember-service-worker.svg?branch=master)](https://travis-ci.org/DockYard/ember-service-worker)
 
+## 🚨 WARNING 🚨
+
+Do not use this in production right now, you will troll your users and they will be unable to use your app.
+
 ## Batteries excluded
 
 Without any extra addons all this addon does is install a Service Worker,
