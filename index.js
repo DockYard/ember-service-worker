@@ -88,7 +88,10 @@ module.exports = {
 
   contentFor: function(type, config) {
     if (type === 'body-footer' && config.environment !== 'test') {
-      var functionBody = fs.readFileSync(path.join(this.root, 'lib/registration.js'));
+      var rootURL = config.rootURL || config.baseURL || '/';
+      var functionBody = fs.readFileSync(path.join(this.root, 'lib/registration.js'), { encoding: 'utf8' });
+
+      functionBody = functionBody.replace(/{{rootURL}}/g, rootURL);
       return '<script>' + functionBody + '</script>';
     }
   },
