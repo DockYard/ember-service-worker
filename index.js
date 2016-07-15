@@ -7,6 +7,9 @@ var mergeTrees = require('broccoli-merge-trees');
 var writeFile = require('broccoli-file-creator');
 var Babel = require('broccoli-babel-transpiler');
 var getBabelOptions = require('./lib/get-babel-options');
+var Rollup = require('./lib/rollup-with-dependencies');
+var rollupReplace = require('rollup-plugin-replace');
+var Funnel = require('broccoli-funnel');
 
 module.exports = {
   name: 'ember-service-worker',
@@ -26,7 +29,7 @@ module.exports = {
       var plugins = this._findPluginsFor(this.project);
       var pluginFileNames = [];
 
-      var trees = [tree];
+      var serviceWorkerTrees = [];
 
       plugins = [this].concat(plugins, this.project);
 
@@ -35,18 +38,49 @@ module.exports = {
         var pluginName = plugin.pkg.name || plugin.name;
 
         if (pluginTree) {
-          trees.push(pluginTree);
-          pluginFileNames.push('\'' + pluginName + '.js\'');
+          serviceWorkerTrees.push(pluginTree);
+          pluginFileNames.push(pluginName);
         }
       });
 
-      var swjsTemplate =
-        'var VERSION = ' + (+new Date()) + ';' +
-        'self.importScripts(' + pluginFileNames.join(',') + ');'
+      var swjsTemplate = '';
 
-      trees.push(writeFile('sw.js', swjsTemplate));
+      pluginFileNames.forEach(function(name) {
+        swjsTemplate += 'import "' + name + '/service-worker";';
+      });
 
-      return mergeTrees(trees, { overwrite: true });
+      serviceWorkerTrees.push(writeFile('sw.js', swjsTemplate));
+      var serviceWorkerTree = mergeTrees(serviceWorkerTrees, { overwrite: true });
+
+      var rollupReplaceConfig = {
+        include: '**/ember-service-worker/service-worker/index.js',
+        delimiters: ['{{', '}}']
+      };
+
+      // define `BUILD_TIME` as a getter so that each time
+      // rollup runs the version string is changed.  Otherwise,
+      // when running `ember s` this would never change (leading to
+      // cache invalidation trollage).
+      Object.defineProperty(rollupReplaceConfig, 'BUILD_TIME', {
+        enumerable: true,
+        configurable: true,
+        get: function() {
+          return (new Date()).getTime();
+        }
+      });
+
+      serviceWorkerTree = new Rollup(serviceWorkerTree, {
+        inputFiles: '**/*.js',
+        rollup: {
+          entry: 'sw.js',
+          dest: 'sw.js',
+          plugins: [
+            rollupReplace(rollupReplaceConfig)
+          ]
+        }
+      });
+
+      return mergeTrees([serviceWorkerTree, tree], { overwrite: true });
     }
 
     return tree;
@@ -63,7 +97,12 @@ module.exports = {
     var projectPath = path.resolve(project.root, 'service-worker');
 
     if (fs.existsSync(projectPath)) {
-      return Babel(this.treeGenerator(projectPath), getBabelOptions(project));
+      var babelTree = new Babel(this.treeGenerator(projectPath), getBabelOptions(project));
+      var name = project.pkg.name || project.name;
+
+      return new Funnel(babelTree, {
+        destDir: name + '/service-worker'
+      });
     }
   },
 
