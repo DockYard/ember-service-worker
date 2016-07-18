@@ -43,7 +43,7 @@ module.exports = {
 
       plugins.forEach(function(plugin) {
         var pluginServiceWorkerTree = self._serviceWorkerTreeFor(plugin);
-        var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrtionTreeFor(plugin);
+        var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrationTreeFor(plugin);
         var pluginName = addonUtils.getName(plugin);
 
         if (pluginServiceWorkerTree) {
@@ -139,7 +139,7 @@ module.exports = {
     return this._transpilePath(project, 'service-worker');
   },
 
-  _serviceWorkerRegistrtionTreeFor: function(project) {
+  _serviceWorkerRegistrationTreeFor: function(project) {
     return this._transpilePath(project, 'service-worker-registration');
   },
 
