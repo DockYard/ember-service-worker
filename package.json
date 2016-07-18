@@ -55,6 +55,7 @@
     "clone": "^1.0.2",
     "ember-cli-babel": "^5.1.6",
     "exists-sync": "0.0.3",
+    "hash-for-dep": "^1.0.2",
     "rollup-plugin-replace": "^1.1.1"
   },
   "ember-addon": {
@@ -62,6 +63,8 @@
     "versionCompatibility": {
       "ember": ">1.13.0 <3.0.0"
     },
-    "before": ["ember-cli-sri"]
+    "before": [
+      "ember-cli-sri"
+    ]
   }
 }

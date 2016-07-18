@@ -1,3 +1,4 @@
+export const PROJECT_REVISION = '{{PROJECT_REVISION}}';
 export const VERSION = '{{BUILD_TIME}}';
 
 let FETCH_HANDLERS = [];

@@ -91,6 +91,24 @@ self.addEventListener('install', function(event) {
 });
 ```
 
+#### `PROJECT_REVISION`
+
+This is a constant that you can utilize which is tied to the project (and all
+levels of dependencies). One use case for this, is to ensure that the service worker
+in use is paired with the correct project:
+
+```js
+import { PROJECT_REVISION } from 'ember-service-worker/service-worker';
+
+self.addEventListener('message', function(event) {
+  if (event.data && event.data.command === 'verify-project-revision') {
+    if (PROJECT_REVISION !== event.data.PROJECT_REVISION) {
+      // handle when the project revision doesn't match
+    }
+  }
+});
+```
+
 ## Service Worker Registration Tree
 
 Create a `service-worker-registration/index.js` file within the root of your addon. This file
@@ -128,6 +146,26 @@ import { addErrorHandler } from 'ember-service-worker/service-worker-registratio
 
 addErrorHandler(function(reg) {
   // do stuff on errored registration
+});
+```
+
+#### `PROJECT_VERSION`
+
+This is a constant that you can utilize which is tied to the project (and all
+levels of dependencies). One use case for this, is to ensure that the service worker
+in use is paired with the correct project:
+
+```js
+import { addSuccessHandler, PROJECT_REVISION } from 'ember-service-worker/service-worker-registration';
+
+addSuccessHandler(function(reg) {
+  return navigator.serviceWorker.ready
+    .then(function() {
+      navigator.serviceWorker.controller.postMessage({
+        command: 'verify-project-revision',
+        revision: PROJECT_REVISION
+      });
+    });
 });
 ```
 
