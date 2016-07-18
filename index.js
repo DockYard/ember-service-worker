@@ -10,6 +10,7 @@ var getBabelOptions = require('./lib/get-babel-options');
 var Rollup = require('./lib/rollup-with-dependencies');
 var rollupReplace = require('rollup-plugin-replace');
 var Funnel = require('broccoli-funnel');
+var existsSync = require('exists-sync');
 
 module.exports = {
   name: 'ember-service-worker',
@@ -27,60 +28,40 @@ module.exports = {
     if (type === 'all') {
       var self = this;
       var plugins = this._findPluginsFor(this.project);
-      var pluginFileNames = [];
 
+      var swjsTemplate = '';
+      var registrationTemplate = '';
       var serviceWorkerTrees = [];
+      var serviceWorkerRegistrationTrees = [];
 
       plugins = [this].concat(plugins, this.project);
 
       plugins.forEach(function(plugin) {
-        var pluginTree = self._serviceWorkerTreeFor(plugin);
+        var pluginServiceWorkerTree = self._serviceWorkerTreeFor(plugin);
+        var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrtionTreeFor(plugin);
         var pluginName = plugin.pkg.name || plugin.name;
 
-        if (pluginTree) {
-          serviceWorkerTrees.push(pluginTree);
-          pluginFileNames.push(pluginName);
+        if (pluginServiceWorkerTree) {
+          serviceWorkerTrees.push(pluginServiceWorkerTree);
+          swjsTemplate += 'import "' + pluginName + '/service-worker";';
         }
-      });
 
-      var swjsTemplate = '';
-
-      pluginFileNames.forEach(function(name) {
-        swjsTemplate += 'import "' + name + '/service-worker";';
+        if (pluginServiceWorkerRegistrationTree) {
+          serviceWorkerRegistrationTrees.push(pluginServiceWorkerRegistrationTree);
+          registrationTemplate += 'import "' + pluginName + '/service-worker-registration";';
+        }
       });
 
       serviceWorkerTrees.push(writeFile('sw.js', swjsTemplate));
       var serviceWorkerTree = mergeTrees(serviceWorkerTrees, { overwrite: true });
 
-      var rollupReplaceConfig = {
-        include: '**/ember-service-worker/service-worker/index.js',
-        delimiters: ['{{', '}}']
-      };
+      serviceWorkerRegistrationTrees.push(writeFile('sw-registration.js', registrationTemplate));
+      var serviceWorkerRegistrationTree = mergeTrees(serviceWorkerRegistrationTrees, { overwrite: true });
 
-      // define `BUILD_TIME` as a getter so that each time
-      // rollup runs the version string is changed.  Otherwise,
-      // when running `ember s` this would never change (leading to
-      // cache invalidation trollage).
-      Object.defineProperty(rollupReplaceConfig, 'BUILD_TIME', {
-        enumerable: true,
-        configurable: true,
-        get: function() {
-          return (new Date()).getTime();
-        }
-      });
+      serviceWorkerTree = this._rollupTree(serviceWorkerTree, 'sw.js');
+      serviceWorkerRegistrationTree = this._rollupTree(serviceWorkerRegistrationTree, 'sw-registration.js');
 
-      serviceWorkerTree = new Rollup(serviceWorkerTree, {
-        inputFiles: '**/*.js',
-        rollup: {
-          entry: 'sw.js',
-          dest: 'sw.js',
-          plugins: [
-            rollupReplace(rollupReplaceConfig)
-          ]
-        }
-      });
-
-      return mergeTrees([serviceWorkerTree, tree], { overwrite: true });
+      return mergeTrees([serviceWorkerTree, serviceWorkerRegistrationTree, tree], { overwrite: true });
     }
 
     return tree;
@@ -88,25 +69,78 @@ module.exports = {
 
   contentFor: function(type, config) {
     if (type === 'body-footer' && config.environment !== 'test') {
-      var rootURL = config.rootURL || config.baseURL || '/';
-      var functionBody = fs.readFileSync(path.join(this.root, 'lib/registration.js'), { encoding: 'utf8' });
+      var rootURL = this._getRootURL();
 
-      functionBody = functionBody.replace(/{{rootURL}}/g, rootURL);
-      return '<script>' + functionBody + '</script>';
+      return '<script src="' + rootURL + 'sw-registration.js"></script>';
     }
   },
 
-  _serviceWorkerTreeFor: function(project) {
-    var projectPath = path.resolve(project.root, 'service-worker');
+  _rollupTree: function(tree, entryFile, destFile) {
+    var rootURL = this._getRootURL();
 
-    if (fs.existsSync(projectPath)) {
-      var babelTree = new Babel(this.treeGenerator(projectPath), getBabelOptions(project));
-      var name = project.pkg.name || project.name;
+    var rollupReplaceConfig = {
+      include: ['**/ember-service-worker/**/*.js'],
+      delimiters: ['{{', '}}'],
+      ROOT_URL: rootURL
+    };
+
+    // define `BUILD_TIME` as a getter so that each time
+    // rollup runs the version string is changed.  Otherwise,
+    // when running `ember s` this would never change (leading to
+    // cache invalidation trollage).
+    Object.defineProperty(rollupReplaceConfig, 'BUILD_TIME', {
+      enumerable: true,
+      configurable: true,
+      get: function() {
+        return (new Date()).getTime();
+      }
+    });
+
+    return new Rollup(tree, {
+      inputFiles: '**/*.js',
+      rollup: {
+        entry: entryFile,
+        dest: destFile || entryFile,
+        format: 'iife',
+        plugins: [
+          rollupReplace(rollupReplaceConfig)
+        ]
+      }
+    });
+  },
+
+  _getRootURL: function() {
+    if (this._projectRootURL) {
+      return this._projectRootURL;
+    }
+
+    var config = this.project.config();
+    var rootURL = config.rootURL || config.baseURL || '/';
+
+    return this._projectRootURL = rootURL;
+  },
+
+  _transpilePath: function(project, treePath) {
+    var projectPath = path.resolve(project.root, treePath);
+
+    if (existsSync(projectPath)) {
+      var babelOptions = getBabelOptions(project);
+      var babelTree = new Babel(this.treeGenerator(projectPath), babelOptions);
 
       return new Funnel(babelTree, {
-        destDir: name + '/service-worker'
+        destDir: project.pkg.name + '/' + treePath
       });
     }
+
+    return null;
+  },
+
+  _serviceWorkerTreeFor: function(project) {
+    return this._transpilePath(project, 'service-worker');
+  },
+
+  _serviceWorkerRegistrtionTreeFor: function(project) {
+    return this._transpilePath(project, 'service-worker-registration');
   },
 
   _findPluginsFor: function(project) {

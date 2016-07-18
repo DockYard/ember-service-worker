@@ -35,7 +35,13 @@ To create an Ember Service Worker plugin, you first need to add the
 `ember-service-worker-plugin` keyword to the `keywords` option in the plugin's
 `package.json`
 
-Then create an `service-worker/index.js` file within in the root of your addon. This file will
+From within a service worker plugin, you can modify the contents of the generated service worker
+(built to `dist/sw.js`) and/or you can modify the mechanism of service worker registration ( built
+to `dist/sw-registration.js`).
+
+## Service Worker Tree
+
+Create a `service-worker/index.js` file within in the root of your addon. This file will
 automatically be loaded by the created service worker.
 
 Other files in the `service-worker` file are available for `import` via standard ES6 module
@@ -85,10 +91,52 @@ self.addEventListener('install', function(event) {
 });
 ```
 
+## Service Worker Registration Tree
+
+Create a `service-worker-registration/index.js` file within the root of your addon. This file
+is required to register the service worker (and its scope).
+
+Other files in the `service-worker-registration` file are available for `import` via standard
+ES6 module semantics.
+
+### API
+
+#### `addSuccessHandler`
+
+You can use this method to register a callback to execute after registration is successful.
+The callback will be passed the `registration` object.
+
+Example:
+
+```js
+import { addSuccessHandler } from 'ember-service-worker/service-worker-registration';
+
+addSuccessHandler(function(reg) {
+  // do stuff on successful registration
+});
+```
+
+#### `addErrroHandler`
+
+You can use this method to register a callback to execute if registration has errored.
+The callback will be passed the `registration` object.
+
+Example:
+
+```js
+import { addErrorHandler } from 'ember-service-worker/service-worker-registration';
+
+addErrorHandler(function(reg) {
+  // do stuff on errored registration
+});
+```
+
 ## Adding Service Worker code directly to your app
 
 It is also possible to add service worker code to your app directly. To do this
-add a `service-worker/index.js` file in the root of your project.
+add a `service-worker/index.js` or `service-worker-registration/index.js` file to
+your project.
+
 This works exactly as authoring plugins.
 
 ## Authors
