@@ -11,6 +11,7 @@ self.addEventListener('fetch', function fetchEventListenerCallback(event) {
 
     if (index >= FETCH_HANDLERS.length) {
       resolve(fetch(event.request));
+      return;
     }
 
     var handler = FETCH_HANDLERS[index];
