@@ -12,6 +12,7 @@ var rollupReplace = require('rollup-plugin-replace');
 var Funnel = require('broccoli-funnel');
 var existsSync = require('exists-sync');
 var hashForDep = require('hash-for-dep');
+var addonUtils = require('./lib/addon-utils');
 
 module.exports = {
   name: 'ember-service-worker',
@@ -145,20 +146,7 @@ module.exports = {
   },
 
   _findPluginsFor: function(project) {
-    var self = this;
-    var plugins = [];
-
-    (project.addons || []).forEach(function(addon) {
-      if (self._addonHasKeyword(addon, 'ember-service-worker-plugin')) {
-        plugins.push(addon);
-      }
-    });
-
-    return plugins;
-  },
-
-  _addonHasKeyword: function(addon, keyword) {
-    var keywords = addon.pkg.keywords;
-    return keywords.indexOf(keyword) > -1;
+    var addons = project.addons || [];
+    return addonUtils.filterByKeyword(addons, 'ember-service-worker-plugin');
   }
 };
