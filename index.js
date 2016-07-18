@@ -44,7 +44,7 @@ module.exports = {
       plugins.forEach(function(plugin) {
         var pluginServiceWorkerTree = self._serviceWorkerTreeFor(plugin);
         var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrtionTreeFor(plugin);
-        var pluginName = plugin.pkg.name || plugin.name;
+        var pluginName = addonUtils.getName(plugin);
 
         if (pluginServiceWorkerTree) {
           serviceWorkerTrees.push(pluginServiceWorkerTree);

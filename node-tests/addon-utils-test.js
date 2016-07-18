@@ -1,4 +1,3 @@
-
 /* globals suite, test */
 /* jshint node: true, esnext: false, expr: true */
 /* jscs: disable */
@@ -31,4 +30,19 @@ test('#filterByKeyword returns the addons that have give keyword', function() {
   assert.equal(result.length, 2, 'Two addons should have been found');
   assert.equal(result[0].pkg.name, 'a', 'First addon found should be "a"');
   assert.equal(result[1].pkg.name, 'c', 'Second addon found should be "b"');
+});
+
+test('#getName returns the package name if available', function() {
+  var addon = { pkg: { name: 'foo' } };
+  assert.equal(addonUtils.getName(addon), 'foo', 'Should return "foo"');
+});
+
+test('#getName returns the addon\'s name if the package name is not specified', function() {
+  var addon = { name: 'foo' };
+  assert.equal(addonUtils.getName(addon), 'foo', 'Should return "foo"');
+});
+
+test('#getName returns the package name over addon name', function() {
+  var addon = { name: 'bar', pkg: { name: 'foo' } };
+  assert.equal(addonUtils.getName(addon), 'foo', 'Should return "foo"');
 });
