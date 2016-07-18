@@ -6,7 +6,7 @@ let ERROR_HANDLERS = [];
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('{{ROOT_URL}}sw.js', { scope: '{{ROOT_URL}}' })
     .then(function(reg) {
-      let current = new Promise.resolve();
+      let current = Promise.resolve();
 
       for (let i = 0; i < SUCCESS_HANDLERS.length; i++) {
         current = current.then(function() {
@@ -20,7 +20,7 @@ if ('serviceWorker' in navigator) {
         });
     })
     .catch(function(error) {
-      let current = new Promise.resolve();
+      let current = Promise.resolve();
 
       for (let i = 0; i < ERROR_HANDLERS.length; i++) {
         current = current.then(function() {
