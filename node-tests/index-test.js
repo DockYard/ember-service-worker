@@ -8,6 +8,7 @@ var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
 var helpers = require('broccoli-test-helpers');
+var cleanupBuilders = helpers.cleanupBuilders;
 
 var fixturePath = path.join(__dirname, 'fixtures');
 
@@ -39,6 +40,10 @@ var generateProject = function(name, projectPath) {
 };
 
 suite('Index');
+
+afterEach(function() {
+  cleanupBuilders();
+});
 
 test('#_findPluginsFor grabs all plugins from a project', function() {
   var project = {
