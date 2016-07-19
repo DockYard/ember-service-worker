@@ -12,6 +12,7 @@ var rollupReplace = require('rollup-plugin-replace');
 var Funnel = require('broccoli-funnel');
 var existsSync = require('exists-sync');
 var hashForDep = require('hash-for-dep');
+var addonUtils = require('./lib/addon-utils');
 
 module.exports = {
   name: 'ember-service-worker',
@@ -42,8 +43,8 @@ module.exports = {
 
       plugins.forEach(function(plugin) {
         var pluginServiceWorkerTree = self._serviceWorkerTreeFor(plugin);
-        var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrtionTreeFor(plugin);
-        var pluginName = plugin.pkg.name || plugin.name;
+        var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrationTreeFor(plugin);
+        var pluginName = addonUtils.getName(plugin);
 
         if (pluginServiceWorkerTree) {
           serviceWorkerTrees.push(pluginServiceWorkerTree);
@@ -132,33 +133,18 @@ module.exports = {
         destDir: project.pkg.name + '/' + treePath
       });
     }
-
-    return null;
   },
 
   _serviceWorkerTreeFor: function(project) {
     return this._transpilePath(project, 'service-worker');
   },
 
-  _serviceWorkerRegistrtionTreeFor: function(project) {
+  _serviceWorkerRegistrationTreeFor: function(project) {
     return this._transpilePath(project, 'service-worker-registration');
   },
 
   _findPluginsFor: function(project) {
-    var self = this;
-    var plugins = [];
-
-    (project.addons || []).forEach(function(addon) {
-      if (self._addonHasKeyword(addon, 'ember-service-worker-plugin')) {
-        plugins.push(addon);
-      }
-    });
-
-    return plugins;
-  },
-
-  _addonHasKeyword: function(addon, keyword) {
-    var keywords = addon.pkg.keywords;
-    return keywords.indexOf(keyword) > -1;
+    var addons = project.addons || [];
+    return addonUtils.filterByKeyword(addons, 'ember-service-worker-plugin');
   }
 };
