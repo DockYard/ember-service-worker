@@ -4,18 +4,20 @@ export const VERSION = '{{BUILD_TIME}}';
 let FETCH_HANDLERS = [];
 
 self.addEventListener('fetch', function fetchEventListenerCallback(event) {
-  var resolver = function fetchResolver(resolve, reject, index) {
+  let resolver = function fetchResolver(resolve, reject, index) {
     if (!index) {
       index = 0;
     }
 
     if (index >= FETCH_HANDLERS.length) {
       resolve(fetch(event.request));
+      return;
     }
 
-    var handler = FETCH_HANDLERS[index];
+    let handler = FETCH_HANDLERS[index];
+    let result = handler(event);
 
-    handler(event)
+    Promise.resolve(result)
       .then(function (response) {
         if (response) {
           return resolve(response);
