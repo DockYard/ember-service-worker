@@ -134,7 +134,7 @@ addSuccessHandler(function(reg) {
 });
 ```
 
-#### `addErrroHandler`
+#### `addErrorHandler`
 
 You can use this method to register a callback to execute if registration has errored.
 The callback will be passed the `registration` object.
