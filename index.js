@@ -127,7 +127,7 @@ module.exports = {
 
     if (existsSync(projectPath)) {
       var babelOptions = getBabelOptions(project);
-      var babelTree = new Babel(project.treeGenerator(projectPath), babelOptions);
+      var babelTree = new Babel(this.treeGenerator(projectPath), babelOptions);
 
       return new Funnel(babelTree, {
         destDir: project.pkg.name + '/' + treePath

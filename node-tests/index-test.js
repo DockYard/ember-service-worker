@@ -33,13 +33,16 @@ var generateProject = function(name, projectPath) {
   return {
     pkg: { name: name },
     root: path.join(fixturePath, projectPath),
-    treeGenerator: function(dir) {
-      return dir;
-    }
   };
 };
 
 suite('Index');
+
+beforeEach(function() {
+  addonIndex.treeGenerator = function(dir) {
+    return dir;
+  };
+});
 
 afterEach(function() {
   cleanupBuilders();
