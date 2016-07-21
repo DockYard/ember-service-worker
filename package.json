@@ -9,7 +9,7 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "mocha node-tests --ui qunit",
+    "test": "mocha node-tests",
     "ember-test": "ember try:each"
   },
   "repository": "https://github.com/DockYard/ember-service-worker",

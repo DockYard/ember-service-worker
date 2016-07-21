@@ -36,61 +36,70 @@ var generateProject = function(name, projectPath) {
   };
 };
 
-suite('Index');
+describe('Index', function() {
 
-beforeEach(function() {
-  addonIndex.treeGenerator = function(dir) {
-    return dir;
-  };
-});
-
-afterEach(function() {
-  cleanupBuilders();
-});
-
-test('#_findPluginsFor grabs all plugins from a project', function() {
-  var project = {
-    addons: [
-      { name: 'one', pkg: { keywords: ['ember-addon'] } },
-      { name: 'two', pkg: { keywords: ['ember-addon', 'ember-service-worker-plugin'] } }
-    ]
-  };
-
-  var addons = addonIndex._findPluginsFor(project);
-
-  assert.equal(addons.length, 1, 'It should find one addon');
-  assert.equal(addons[0].name, 'two', 'The addon named "two" should be found');
-});
-
-test('#_transpilePath transpiles a tree from given path', function() {
-  var project = generateProject('test-project', 'transpile-tree-test');
-
-  return transpilePath(project, 'a-path').then(function(results) {
-    var indexOfFile = results.files.indexOf('test-project/a-path/file.js');
-    assert.ok(indexOfFile >= 0, 'File is copied over');
-
-    var filePath = pathFromEntry(results.entries[indexOfFile]);
-    assert.equal(fs.readFileSync(filePath), 'var foo = 42;');
+  beforeEach(function() {
+    addonIndex.treeGenerator = function(dir) {
+      return dir;
+    };
   });
-});
 
-test('#_transpilePath returns only if the target path exists', function() {
-  var project = generateProject('test-project', 'transpile-tree-test');
-  assert.equal(addonIndex._transpilePath(project, 'b-path'), undefined);
-});
-
-test('#_serviceWorkerTreeFor gets the service-worker directory', function() {
-  var project = generateProject('test-project', 'transpile-tree-test');
-  return serviceWorkerTreeFor(project).then(function(results) {
-    assert.ok(results.files.indexOf('test-project/service-worker/index.js') >= 0, 'index.js is copied over');
-    assert.ok(results.files.indexOf('test-project/service-worker/module.js') >= 0, 'other files are copied over');
+  afterEach(function() {
+    cleanupBuilders();
   });
-});
 
-test('#_serviceWorkerRegistrationTreeFor gets the service-worker directory', function() {
-  var project = generateProject('test-project', 'transpile-tree-test');
-  return serviceWorkerRegistrationTreeFor(project).then(function(results) {
-    assert.ok(results.files.indexOf('test-project/service-worker-registration/index.js') >= 0, 'index.js is copied over');
-    assert.ok(results.files.indexOf('test-project/service-worker-registration/module.js') >= 0, 'other files are copied over');
+  describe('#_findPluginsFor', function() {
+    it('grabs all plugins from a project', function() {
+      var project = {
+        addons: [
+          { name: 'one', pkg: { keywords: ['ember-addon'] } },
+          { name: 'two', pkg: { keywords: ['ember-addon', 'ember-service-worker-plugin'] } }
+        ]
+      };
+
+      var addons = addonIndex._findPluginsFor(project);
+
+      assert.equal(addons.length, 1, 'It should find one addon');
+      assert.equal(addons[0].name, 'two', 'The addon named "two" should be found');
+    });
+  });
+
+  describe('#_transpilePath', function() {
+    it('transpiles a tree from given path', function() {
+      var project = generateProject('test-project', 'transpile-tree-test');
+
+      return transpilePath(project, 'a-path').then(function(results) {
+        var indexOfFile = results.files.indexOf('test-project/a-path/file.js');
+        assert.ok(indexOfFile >= 0, 'File is copied over');
+
+        var filePath = pathFromEntry(results.entries[indexOfFile]);
+        assert.equal(fs.readFileSync(filePath), 'var foo = 42;');
+      });
+    });
+
+    it('returns only if the target path exists', function() {
+      var project = generateProject('test-project', 'transpile-tree-test');
+      assert.equal(addonIndex._transpilePath(project, 'b-path'), undefined);
+    });
+  });
+
+  describe('#_serviceWorkerTreeFor', function() {
+    it('gets the service-worker directory', function() {
+      var project = generateProject('test-project', 'transpile-tree-test');
+      return serviceWorkerTreeFor(project).then(function(results) {
+        assert.ok(results.files.indexOf('test-project/service-worker/index.js') >= 0, 'index.js is copied over');
+        assert.ok(results.files.indexOf('test-project/service-worker/module.js') >= 0, 'other files are copied over');
+      });
+    });
+  });
+
+  describe('#_serviceWorkerRegistrationTreeFor', function() {
+    it('gets the service-worker-registration directory', function() {
+      var project = generateProject('test-project', 'transpile-tree-test');
+      return serviceWorkerRegistrationTreeFor(project).then(function(results) {
+        assert.ok(results.files.indexOf('test-project/service-worker-registration/index.js') >= 0, 'index.js is copied over');
+        assert.ok(results.files.indexOf('test-project/service-worker-registration/module.js') >= 0, 'other files are copied over');
+      });
+    });
   });
 });
