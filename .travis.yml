@@ -1,17 +1,19 @@
 ---
 language: node_js
 node_js:
+  - "0.12"
   - "4"
+  - "stable"
 
 sudo: false
 
 cache:
   directories:
     - node_modules
+    - node-tests/fixtures/simple-app/node_modules
 
 env:
   - TEST_SCENARIO=test
-  - TEST_SCENARIO=ember-test
 
 matrix:
   fast_finish: true
@@ -21,11 +23,10 @@ matrix:
 before_install:
   - npm config set spin false
   - npm install -g bower
-  - npm install phantomjs-prebuilt
 
 install:
+  - cd node-tests/fixtures/simple-app && npm install && bower install && cd -
   - npm install
-  - bower install
 
 script:
   - npm run $TEST_SCENARIO

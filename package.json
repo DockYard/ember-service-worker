@@ -9,8 +9,7 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "mocha node-tests",
-    "ember-test": "ember try:each"
+    "test": "mocha node-tests"
   },
   "repository": "https://github.com/DockYard/ember-service-worker",
   "engines": {
@@ -40,7 +39,8 @@
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
     "loader.js": "^4.0.1",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "rimraf": "^2.5.3"
   },
   "keywords": [
     "ember-addon",
