@@ -1,0 +1,7 @@
+{
+  "name": "ember-service-worker-test",
+  "keywords": [
+    "ember-addon",
+    "ember-service-worker-plugin"
+  ]
+}
