@@ -57,12 +57,16 @@ module.exports = {
 
       if (pluginServiceWorkerTree) {
         serviceWorkerTrees.push(pluginServiceWorkerTree);
-        swjsTemplate += 'import "' + pluginName + '/service-worker";';
+        if (existsSync(pluginServiceWorkerTree._inputNodes[0]._inputNodes[0]._directoryPath + '/index.js')) {
+          swjsTemplate += 'import "' + pluginName + '/service-worker";';
+        }
       }
 
       if (pluginServiceWorkerRegistrationTree) {
         serviceWorkerRegistrationTrees.push(pluginServiceWorkerRegistrationTree);
-        registrationTemplate += 'import "' + pluginName + '/service-worker-registration";';
+        if (existsSync(pluginServiceWorkerRegistrationTree._inputNodes[0]._inputNodes[0]._directoryPath + '/index.js')) {
+          registrationTemplate += 'import "' + pluginName + '/service-worker-registration";';
+        }
       }
     });
 
