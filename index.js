@@ -1,7 +1,6 @@
 /* jshint node: true */
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var mergeTrees = require('broccoli-merge-trees');
 var writeFile = require('broccoli-file-creator');
@@ -18,8 +17,11 @@ module.exports = {
   name: 'ember-service-worker',
 
   included: function(app) {
-    this._super.included && this._super.included.apply(this, arguments);
+    if (this._super.included) {
+      this._super.included.apply(this, arguments);
+    }
 
+    // Configures Ember CLI's build system to not add a fingerprint to sw.js
     this.app = app;
     this.app.options = this.app.options || {};
     this.app.options.fingerprint = this.app.options.fingerprint || {};
@@ -30,46 +32,50 @@ module.exports = {
   },
 
   postprocessTree: function(type, tree) {
-    if (type === 'all') {
-      var self = this;
-      var plugins = this._findPluginsFor(this.project);
-
-      var swjsTemplate = '';
-      var registrationTemplate = '';
-      var serviceWorkerTrees = [];
-      var serviceWorkerRegistrationTrees = [];
-
-      plugins = [this].concat(plugins, this.project);
-
-      plugins.forEach(function(plugin) {
-        var pluginServiceWorkerTree = self._serviceWorkerTreeFor(plugin);
-        var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrationTreeFor(plugin);
-        var pluginName = addonUtils.getName(plugin);
-
-        if (pluginServiceWorkerTree) {
-          serviceWorkerTrees.push(pluginServiceWorkerTree);
-          swjsTemplate += 'import "' + pluginName + '/service-worker";';
-        }
-
-        if (pluginServiceWorkerRegistrationTree) {
-          serviceWorkerRegistrationTrees.push(pluginServiceWorkerRegistrationTree);
-          registrationTemplate += 'import "' + pluginName + '/service-worker-registration";';
-        }
-      });
-
-      serviceWorkerTrees.push(writeFile('sw.js', swjsTemplate));
-      var serviceWorkerTree = mergeTrees(serviceWorkerTrees, { overwrite: true });
-
-      serviceWorkerRegistrationTrees.push(writeFile('sw-registration.js', registrationTemplate));
-      var serviceWorkerRegistrationTree = mergeTrees(serviceWorkerRegistrationTrees, { overwrite: true });
-
-      serviceWorkerTree = this._rollupTree(serviceWorkerTree, 'sw.js');
-      serviceWorkerRegistrationTree = this._rollupTree(serviceWorkerRegistrationTree, 'sw-registration.js');
-
-      return mergeTrees([serviceWorkerTree, serviceWorkerRegistrationTree, tree], { overwrite: true });
+    if (type !== 'all') {
+      return tree;
     }
 
-    return tree;
+    var self = this;
+    var plugins = this._findPluginsFor(this.project);
+
+    var swjsTemplate = '';
+    var registrationTemplate = '';
+    var serviceWorkerTrees = [];
+    var serviceWorkerRegistrationTrees = [];
+
+    // Add the project itself as a possible plugin, this way user can add custom
+    // service-worker code in their app, without needing to build a plugin.
+    plugins = [this].concat(plugins, this.project);
+
+    // Builds the trees for the sw.js asset and the service-worker registration
+    // script.
+    plugins.forEach(function(plugin) {
+      var pluginServiceWorkerTree = self._serviceWorkerTreeFor(plugin);
+      var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrationTreeFor(plugin);
+      var pluginName = addonUtils.getName(plugin);
+
+      if (pluginServiceWorkerTree) {
+        serviceWorkerTrees.push(pluginServiceWorkerTree);
+        swjsTemplate += 'import "' + pluginName + '/service-worker";';
+      }
+
+      if (pluginServiceWorkerRegistrationTree) {
+        serviceWorkerRegistrationTrees.push(pluginServiceWorkerRegistrationTree);
+        registrationTemplate += 'import "' + pluginName + '/service-worker-registration";';
+      }
+    });
+
+    serviceWorkerTrees.push(writeFile('sw.js', swjsTemplate));
+    var serviceWorkerTree = mergeTrees(serviceWorkerTrees, { overwrite: true });
+
+    serviceWorkerRegistrationTrees.push(writeFile('sw-registration.js', registrationTemplate));
+    var serviceWorkerRegistrationTree = mergeTrees(serviceWorkerRegistrationTrees, { overwrite: true });
+
+    serviceWorkerTree = this._rollupTree(serviceWorkerTree, 'sw.js');
+    serviceWorkerRegistrationTree = this._rollupTree(serviceWorkerRegistrationTree, 'sw-registration.js');
+
+    return mergeTrees([serviceWorkerTree, serviceWorkerRegistrationTree, tree], { overwrite: true });
   },
 
   contentFor: function(type, config) {
