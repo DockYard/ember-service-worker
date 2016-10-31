@@ -7,7 +7,7 @@ _A pluggable approach to Service Workers for Ember.js_
 
 ## 🚨 WARNING 🚨
 
-Do not use this in production right now, you will troll your users and they will be unable to use your app.
+Please test this addon on your local/staging environment before deploying to production. Please report any errors or odd behaviour when testing!
 
 ## Batteries excluded
 
