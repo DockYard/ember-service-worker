@@ -14,6 +14,11 @@ var hashForDep = require('hash-for-dep');
 var addonUtils = require('./lib/addon-utils');
 var uglify = require('broccoli-uglify-sourcemap');
 
+var TREE_FOR_METHODS = {
+  'service-worker': 'treeForServiceWorker',
+  'service-worker-registration': 'treeForServiceWorkerRegistration'
+};
+
 module.exports = {
   name: 'ember-service-worker',
 
@@ -52,13 +57,13 @@ module.exports = {
     // Builds the trees for the sw.js asset and the service-worker registration
     // script.
     plugins.forEach(function(plugin) {
-      var pluginServiceWorkerTree = self._serviceWorkerTreeFor(plugin);
-      var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrationTreeFor(plugin);
+      var pluginServiceWorkerTree = self._serviceWorkerTreeFor(plugin, tree);
+      var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrationTreeFor(plugin, tree);
       var pluginName = addonUtils.getName(plugin);
 
       if (pluginServiceWorkerTree) {
         serviceWorkerTrees.push(pluginServiceWorkerTree);
-        if (existsSync(pluginServiceWorkerTree._inputNodes[0]._inputNodes[0]._directoryPath + '/index.js')) {
+        if (self._treeContainsIndexFile(pluginServiceWorkerTree)) {
           swjsTemplate += 'import "' + pluginName + '/service-worker";';
         }
       }
@@ -92,6 +97,11 @@ module.exports = {
 
       return '<script src="' + rootURL + 'sw-registration.js"></script>';
     }
+  },
+
+  _treeContainsIndexFile: function(tree) {
+    return existsSync(tree._inputNodes[0]._inputNodes[0]._directoryPath + '/index.js') ||
+           existsSync(tree._inputNodes[0]._inputNodes[0]._inputNodes[0]._directoryPath + '/index.js');
   },
 
   _rollupTree: function(tree, entryFile, destFile) {
@@ -146,12 +156,23 @@ module.exports = {
     return this._projectRootURL = rootURL;
   },
 
-  _transpilePath: function(project, treePath) {
+  _transpilePath: function(project, treePath, appTree) {
     var projectPath = path.resolve(project.root, treePath);
+    var treeForMethod = TREE_FOR_METHODS[treePath];
+
+    var babelOptions = getBabelOptions(project);
+    var tree;
 
     if (existsSync(projectPath)) {
-      var babelOptions = getBabelOptions(project);
-      var babelTree = new Babel(this.treeGenerator(projectPath), babelOptions);
+      tree = this.treeGenerator(projectPath);
+    }
+
+    if (project[treeForMethod]) {
+      tree = project[treeForMethod](tree, appTree);
+    }
+
+    if (tree) {
+      var babelTree = new Babel(tree, babelOptions);
 
       return new Funnel(babelTree, {
         destDir: project.pkg.name + '/' + treePath
@@ -159,12 +180,12 @@ module.exports = {
     }
   },
 
-  _serviceWorkerTreeFor: function(project) {
-    return this._transpilePath(project, 'service-worker');
+  _serviceWorkerTreeFor: function(project, tree) {
+    return this._transpilePath(project, 'service-worker', tree);
   },
 
-  _serviceWorkerRegistrationTreeFor: function(project) {
-    return this._transpilePath(project, 'service-worker-registration');
+  _serviceWorkerRegistrationTreeFor: function(project, tree) {
+    return this._transpilePath(project, 'service-worker-registration', tree);
   },
 
   _findPluginsFor: function(project) {
