@@ -126,7 +126,7 @@ module.exports = {
       return this._projectRootURL;
     }
 
-    var config = this.project.config();
+    var config = this.project.config(this.app.env);
     var rootURL = config.rootURL || config.baseURL || '/';
 
     return this._projectRootURL = rootURL;
