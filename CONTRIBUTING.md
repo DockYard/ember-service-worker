@@ -63,6 +63,11 @@ bower install
 
 ## Running tests
 
+Before running the tests
+```sh
+cd node-tests/fixtures/simple-app && npm install && bower install && cd -
+```
+
 To run the node tests:
 
 ```sh
