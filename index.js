@@ -12,6 +12,7 @@ var Funnel = require('broccoli-funnel');
 var existsSync = require('exists-sync');
 var hashForDep = require('hash-for-dep');
 var addonUtils = require('./lib/addon-utils');
+var uglify = require('broccoli-uglify-sourcemap');
 
 module.exports = {
   name: 'ember-service-worker',
@@ -77,7 +78,10 @@ module.exports = {
     var serviceWorkerRegistrationTree = mergeTrees(serviceWorkerRegistrationTrees, { overwrite: true });
 
     serviceWorkerTree = this._rollupTree(serviceWorkerTree, 'sw.js');
+    serviceWorkerTree = this._uglifyTree(serviceWorkerTree);
+
     serviceWorkerRegistrationTree = this._rollupTree(serviceWorkerRegistrationTree, 'sw-registration.js');
+    serviceWorkerRegistrationTree = this._uglifyTree(serviceWorkerRegistrationTree);
 
     return mergeTrees([serviceWorkerTree, serviceWorkerRegistrationTree, tree], { overwrite: true });
   },
@@ -119,6 +123,16 @@ module.exports = {
         ]
       }
     });
+  },
+
+  _uglifyTree: function(tree) {
+    if (this.app.options.minifyJS.enabled) {
+      var options = this.app.options.minifyJS.options || {};
+      options.sourceMapConfig = this.app.options.sourcemaps;
+      return uglify(tree,  options);
+    }
+
+    return tree;
   },
 
   _getRootURL: function() {
