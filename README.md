@@ -177,6 +177,34 @@ your project.
 
 This works exactly as authoring plugins.
 
+## Customizing the service worker and service worker registration trees
+
+_since version 0.6_
+
+If you need to modify or transform your service worker (registration) code, you
+can do that using the `treeForServiceWorker` and
+`treeForServiceWorkerRegistration` hooks in the `index.js` file.
+
+The first argument to the hooks is the tree containing the contents of your
+`service-worker` or `service-worker-registrations` directory. The second
+argument is the tree that contains the fully built app.
+
+An example:
+
+```javascript
+var mergeTrees = require('broccoli-merge-trees');
+var AssetMap = require('./lib/asset-map');
+
+module.exports = {
+  treeForServiceWorker(serviceWorkerTree, appTree) {
+    var options = this.app.options['my-service-worker-plugin'];
+    var assetMapFile = new AssetMap([appTree], options);
+
+    return mergeTrees([serviceWorkerTree, assetMapFile]);
+  }
+};
+```
+
 ## Authors
 
 * [Marten Schilstra](http://twitter.com/martndemus)
