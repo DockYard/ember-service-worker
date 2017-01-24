@@ -1,21 +1,20 @@
-/* jshint node: true */
 'use strict';
 
-var path = require('path');
-var mergeTrees = require('broccoli-merge-trees');
-var writeFile = require('broccoli-file-creator');
-var Babel = require('broccoli-babel-transpiler');
-var getBabelOptions = require('./lib/get-babel-options');
-var Rollup = require('./lib/rollup-with-dependencies');
-var rollupReplace = require('rollup-plugin-replace');
-var Funnel = require('broccoli-funnel');
-var existsSync = require('exists-sync');
-var hashForDep = require('hash-for-dep');
-var addonUtils = require('./lib/addon-utils');
-var EntryPoint = require('./lib/entry-point');
-var uglify = require('broccoli-uglify-sourcemap');
+const path = require('path');
+const mergeTrees = require('broccoli-merge-trees');
+const writeFile = require('broccoli-file-creator');
+const Babel = require('broccoli-babel-transpiler');
+const getBabelOptions = require('./lib/get-babel-options');
+const Rollup = require('./lib/rollup-with-dependencies');
+const rollupReplace = require('rollup-plugin-replace');
+const Funnel = require('broccoli-funnel');
+const existsSync = require('exists-sync');
+const hashForDep = require('hash-for-dep');
+const addonUtils = require('./lib/addon-utils');
+const EntryPoint = require('./lib/entry-point');
+const uglify = require('broccoli-uglify-sourcemap');
 
-var TREE_FOR_METHODS = {
+const TREE_FOR_METHODS = {
   'service-worker': 'treeForServiceWorker',
   'service-worker-registration': 'treeForServiceWorkerRegistration'
 };
@@ -23,7 +22,7 @@ var TREE_FOR_METHODS = {
 module.exports = {
   name: 'ember-service-worker',
 
-  included: function(app) {
+  included(app) {
     if (this._super.included) {
       this._super.included.apply(this, arguments);
     }
@@ -38,16 +37,15 @@ module.exports = {
     this._projectVersion = hashForDep(this.project.root);
   },
 
-  postprocessTree: function(type, tree) {
+  postprocessTree(type, tree) {
     if (type !== 'all') {
       return tree;
     }
 
-    var self = this;
-    var plugins = this._findPluginsFor(this.project);
+    let plugins = this._findPluginsFor(this.project);
 
-    var serviceWorkerTrees = [];
-    var serviceWorkerRegistrationTrees = [];
+    let serviceWorkerTrees = [];
+    let serviceWorkerRegistrationTrees = [];
 
     // Add the project itself as a possible plugin, this way user can add custom
     // service-worker code in their app, without needing to build a plugin.
@@ -55,10 +53,10 @@ module.exports = {
 
     // Builds the trees for the sw.js asset and the service-worker registration
     // script.
-    plugins.forEach(function(plugin) {
-      var pluginServiceWorkerTree = self._serviceWorkerTreeFor(plugin, tree);
-      var pluginServiceWorkerRegistrationTree = self._serviceWorkerRegistrationTreeFor(plugin, tree);
-      var pluginName = addonUtils.getName(plugin);
+    plugins.forEach((plugin) => {
+      let pluginServiceWorkerTree = this._serviceWorkerTreeFor(plugin, tree);
+      let pluginServiceWorkerRegistrationTree = this._serviceWorkerRegistrationTreeFor(plugin, tree);
+      let pluginName = addonUtils.getName(plugin);
 
       if (pluginServiceWorkerTree) {
         serviceWorkerTrees.push(pluginServiceWorkerTree);
@@ -69,31 +67,29 @@ module.exports = {
       }
     });
 
-    var serviceWorkerEntryPoint = new EntryPoint(serviceWorkerTrees, { entryPoint: 'sw.js' });
-    var serviceWorkerTree = mergeTrees(serviceWorkerTrees.concat(serviceWorkerEntryPoint), { overwrite: true });
+    let serviceWorkerEntryPoint = new EntryPoint(serviceWorkerTrees, { entryPoint: 'sw.js' });
+    let serviceWorkerTree = mergeTrees(serviceWorkerTrees.concat(serviceWorkerEntryPoint), { overwrite: true });
     serviceWorkerTree = this._rollupTree(serviceWorkerTree, 'sw.js');
     serviceWorkerTree = this._uglifyTree(serviceWorkerTree);
 
-    var serviceWorkerRegistrationEntryPoint = new EntryPoint(serviceWorkerRegistrationTrees, { entryPoint: 'sw-registration.js' });
-    var serviceWorkerRegistrationTree = mergeTrees(serviceWorkerRegistrationTrees.concat(serviceWorkerRegistrationEntryPoint), { overwrite: true });
+    let serviceWorkerRegistrationEntryPoint = new EntryPoint(serviceWorkerRegistrationTrees, { entryPoint: 'sw-registration.js' });
+    let serviceWorkerRegistrationTree = mergeTrees(serviceWorkerRegistrationTrees.concat(serviceWorkerRegistrationEntryPoint), { overwrite: true });
     serviceWorkerRegistrationTree = this._rollupTree(serviceWorkerRegistrationTree, 'sw-registration.js');
     serviceWorkerRegistrationTree = this._uglifyTree(serviceWorkerRegistrationTree);
 
     return mergeTrees([serviceWorkerTree, serviceWorkerRegistrationTree, tree], { overwrite: true });
   },
 
-  contentFor: function(type, config) {
+  contentFor(type, config) {
     if (type === 'body-footer' && config.environment !== 'test') {
-      var rootURL = this._getRootURL();
-
-      return '<script src="' + rootURL + 'sw-registration.js"></script>';
+      return `<script src="${this._getRootURL()}sw-registration.js"></script>`;
     }
   },
 
-  _rollupTree: function(tree, entryFile, destFile) {
-    var rootURL = this._getRootURL();
+  _rollupTree(tree, entryFile, destFile) {
+    let rootURL = this._getRootURL();
 
-    var rollupReplaceConfig = {
+    let rollupReplaceConfig = {
       include: ['**/ember-service-worker/**/*.js'],
       delimiters: ['{{', '}}'],
       ROOT_URL: rootURL,
@@ -121,9 +117,9 @@ module.exports = {
     });
   },
 
-  _uglifyTree: function(tree) {
+  _uglifyTree(tree) {
     if (this.app.options.minifyJS.enabled) {
-      var options = this.app.options.minifyJS.options || {};
+      let options = this.app.options.minifyJS.options || {};
       options.sourceMapConfig = this.app.options.sourcemaps;
       return uglify(tree,  options);
     }
@@ -131,23 +127,23 @@ module.exports = {
     return tree;
   },
 
-  _getRootURL: function() {
+  _getRootURL() {
     if (this._projectRootURL) {
       return this._projectRootURL;
     }
 
-    var config = this.project.config(this.app.env);
-    var rootURL = config.rootURL || config.baseURL || '/';
+    let config = this.project.config(this.app.env);
+    let rootURL = config.rootURL || config.baseURL || '/';
 
     return this._projectRootURL = rootURL;
   },
 
-  _transpilePath: function(project, treePath, appTree) {
-    var projectPath = path.resolve(project.root, treePath);
-    var treeForMethod = TREE_FOR_METHODS[treePath];
+  _transpilePath(project, treePath, appTree) {
+    let projectPath = path.resolve(project.root, treePath);
+    let treeForMethod = TREE_FOR_METHODS[treePath];
 
-    var babelOptions = getBabelOptions(project);
-    var tree;
+    let babelOptions = getBabelOptions(project);
+    let tree;
 
     if (existsSync(projectPath)) {
       tree = this.treeGenerator(projectPath);
@@ -158,7 +154,7 @@ module.exports = {
     }
 
     if (tree) {
-      var babelTree = new Babel(tree, babelOptions);
+      let babelTree = new Babel(tree, babelOptions);
 
       return new Funnel(babelTree, {
         destDir: project.pkg.name + '/' + treePath
@@ -166,16 +162,16 @@ module.exports = {
     }
   },
 
-  _serviceWorkerTreeFor: function(project, tree) {
+  _serviceWorkerTreeFor(project, tree) {
     return this._transpilePath(project, 'service-worker', tree);
   },
 
-  _serviceWorkerRegistrationTreeFor: function(project, tree) {
+  _serviceWorkerRegistrationTreeFor(project, tree) {
     return this._transpilePath(project, 'service-worker-registration', tree);
   },
 
-  _findPluginsFor: function(project) {
-    var addons = project.addons || [];
+  _findPluginsFor(project) {
+    let addons = project.addons || [];
     return addonUtils.filterByKeyword(addons, 'ember-service-worker-plugin');
   }
 };
