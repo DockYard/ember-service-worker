@@ -4,7 +4,7 @@ var path = require('path');
 var rimraf = require('rimraf').sync;
 var spawnSync = require('child_process').spawnSync;
 
-var emberCLIPath = path.resolve(__dirname, '../node_modules/ember-cli/bin/ember');
+var emberCLIPath = path.resolve(__dirname, './fixtures/simple-app/node_modules/ember-cli/bin/ember');
 
 describe('Acceptance Tests', function() {
   this.timeout(120000);
@@ -17,7 +17,6 @@ describe('Acceptance Tests', function() {
     }
 
     before(function() {
-      runEmberCommand(fixturePath, ['install', '../../../']);
       runEmberCommand(fixturePath, ['build']);
     });
 
