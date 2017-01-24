@@ -49,29 +49,6 @@ semantics.
 
 ### API
 
-To make addons simple and pluggable, some middleware has been added.
-
-#### `addFetchListener`
-
-If you want to listen for `fetch` in your addon, you will need to register this
-through the `addFetchListener` function. This expects a callback function which
-receives the event as argument, just as the callback to
-`addEventListener('fetch', ...)` does. The callback can return a
-Promise that resolves to a response or it can return `undefined`. If the response is undefined
-the next `fetch` handler that has been registered will be called, otherwise the
-response from the promise will be used and no further `fetch` handlers will be
-called.
-
-Example:
-
-```js
-import { addFetchListener } from 'ember-service-worker/service-worker';
-
-addFetchListener(function() {
-  // special sauce here
-});
-```
-
 #### `VERSION`
 
 This is a constant that you can utilize which is updated for every build of the
