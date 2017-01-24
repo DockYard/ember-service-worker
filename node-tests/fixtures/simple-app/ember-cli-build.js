@@ -7,8 +7,6 @@ module.exports = function(defaults) {
     // Add options here
   });
 
-  app.project.addons.map(function(addon) { console.log(addon.pkg.name || addon.name) });
-
   // Use `app.import` to add additional libraries to the generated
   // output files.
   //
