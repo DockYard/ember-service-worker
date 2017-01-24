@@ -65,7 +65,7 @@ describe('Index', function() {
   });
 
   describe('#_transpilePath', function() {
-    it('transpiles a tree from given path', function() {
+    xit('transpiles a tree from given path', function() {
       var project = generateProject('test-project', 'transpile-tree-test');
 
       return transpilePath(project, 'a-path').then(function(results) {
@@ -77,14 +77,14 @@ describe('Index', function() {
       });
     });
 
-    it('returns only if the target path exists', function() {
+    xit('returns only if the target path exists', function() {
       var project = generateProject('test-project', 'transpile-tree-test');
       assert.equal(addonIndex._transpilePath(project, 'b-path'), undefined);
     });
   });
 
   describe('#_serviceWorkerTreeFor', function() {
-    it('gets the service-worker directory', function() {
+    xit('gets the service-worker directory', function() {
       var project = generateProject('test-project', 'transpile-tree-test');
       return serviceWorkerTreeFor(project).then(function(results) {
         assert.ok(results.files.indexOf('test-project/service-worker/index.js') >= 0, 'index.js is copied over');
@@ -94,7 +94,7 @@ describe('Index', function() {
   });
 
   describe('#_serviceWorkerRegistrationTreeFor', function() {
-    it('gets the service-worker-registration directory', function() {
+    xit('gets the service-worker-registration directory', function() {
       var project = generateProject('test-project', 'transpile-tree-test');
       return serviceWorkerRegistrationTreeFor(project).then(function(results) {
         assert.ok(results.files.indexOf('test-project/service-worker-registration/index.js') >= 0, 'index.js is copied over');
