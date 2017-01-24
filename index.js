@@ -12,6 +12,7 @@ var Funnel = require('broccoli-funnel');
 var existsSync = require('exists-sync');
 var hashForDep = require('hash-for-dep');
 var addonUtils = require('./lib/addon-utils');
+var EntryPoint = require('./lib/entry-point');
 var uglify = require('broccoli-uglify-sourcemap');
 
 var TREE_FOR_METHODS = {
@@ -45,8 +46,6 @@ module.exports = {
     var self = this;
     var plugins = this._findPluginsFor(this.project);
 
-    var swjsTemplate = '';
-    var registrationTemplate = '';
     var serviceWorkerTrees = [];
     var serviceWorkerRegistrationTrees = [];
 
@@ -63,28 +62,20 @@ module.exports = {
 
       if (pluginServiceWorkerTree) {
         serviceWorkerTrees.push(pluginServiceWorkerTree);
-        if (self._treeContainsIndexFile(pluginServiceWorkerTree)) {
-          swjsTemplate += 'import "' + pluginName + '/service-worker";';
-        }
       }
 
       if (pluginServiceWorkerRegistrationTree) {
         serviceWorkerRegistrationTrees.push(pluginServiceWorkerRegistrationTree);
-        if (existsSync(pluginServiceWorkerRegistrationTree._inputNodes[0]._inputNodes[0]._directoryPath + '/index.js')) {
-          registrationTemplate += 'import "' + pluginName + '/service-worker-registration";';
-        }
       }
     });
 
-    serviceWorkerTrees.push(writeFile('sw.js', swjsTemplate));
-    var serviceWorkerTree = mergeTrees(serviceWorkerTrees, { overwrite: true });
-
-    serviceWorkerRegistrationTrees.push(writeFile('sw-registration.js', registrationTemplate));
-    var serviceWorkerRegistrationTree = mergeTrees(serviceWorkerRegistrationTrees, { overwrite: true });
-
+    var serviceWorkerEntryPoint = new EntryPoint(serviceWorkerTrees, { entryPoint: 'sw.js' });
+    var serviceWorkerTree = mergeTrees(serviceWorkerTrees.concat(serviceWorkerEntryPoint), { overwrite: true });
     serviceWorkerTree = this._rollupTree(serviceWorkerTree, 'sw.js');
     serviceWorkerTree = this._uglifyTree(serviceWorkerTree);
 
+    var serviceWorkerRegistrationEntryPoint = new EntryPoint(serviceWorkerRegistrationTrees, { entryPoint: 'sw-registration.js' });
+    var serviceWorkerRegistrationTree = mergeTrees(serviceWorkerRegistrationTrees.concat(serviceWorkerRegistrationEntryPoint), { overwrite: true });
     serviceWorkerRegistrationTree = this._rollupTree(serviceWorkerRegistrationTree, 'sw-registration.js');
     serviceWorkerRegistrationTree = this._uglifyTree(serviceWorkerRegistrationTree);
 
@@ -97,11 +88,6 @@ module.exports = {
 
       return '<script src="' + rootURL + 'sw-registration.js"></script>';
     }
-  },
-
-  _treeContainsIndexFile: function(tree) {
-    return existsSync(tree._inputNodes[0]._inputNodes[0]._directoryPath + '/index.js') ||
-           existsSync(tree._inputNodes[0]._inputNodes[0]._inputNodes[0]._directoryPath + '/index.js');
   },
 
   _rollupTree: function(tree, entryFile, destFile) {
