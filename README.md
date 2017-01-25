@@ -15,6 +15,11 @@ Without any extra addons all this addon does is install a Service Worker,
 but the Service Worker itself will do nothing.
 This allows you to craft a set of addons that make the Service Worker function the way you want it to.
 
+## F#$& my assets aren't updating in development mode
+
+Turn on the "Update on reload" setting in the `Application > Service Workers`
+menu in the Chrome devtools.
+
 ## Installation
 
 ```
