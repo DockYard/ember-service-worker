@@ -28,6 +28,13 @@ ember install ember-service-worker
 
 ## Available plugins
 
+Compatible with the `0.6.0` beta series:
+
+- [ember-service-worker-index](https://github.com/DockYard/ember-service-worker-index)
+- [ember-service-worker-asset-cache](https://github.com/DockYard/ember-service-worker-asset-cache)
+
+Compatible with `< 0.5.X`:
+
 - [ember-service-worker-asset-cache](https://github.com/DockYard/ember-service-worker-asset-cache)
 - [ember-service-worker-cache-first](https://github.com/DockYard/ember-service-worker-cache-first)
 - [ember-service-worker-cache-fallback](https://github.com/DockYard/ember-service-worker-cache-fallback)
