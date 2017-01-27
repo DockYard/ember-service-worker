@@ -9,7 +9,7 @@ _A pluggable approach to Service Workers for Ember.js_
 
 Please test this addon on your local/staging environment before deploying to production. Please report any errors or odd behaviour when testing!
 
-The addons is also undergoing a rewrite, the `0.6.0` beta series is only
+The addons has undergone a rewrite, the `0.6.0` series is only
 compatible with plugins that are also versioned at `0.6.0`.
 
 ## Batteries excluded
@@ -31,7 +31,7 @@ ember install ember-service-worker
 
 ## Available plugins
 
-Compatible with the `0.6.0` beta series:
+Compatible with the `0.6.0` series:
 
 - [ember-service-worker-index](https://github.com/DockYard/ember-service-worker-index)
 - [ember-service-worker-asset-cache](https://github.com/DockYard/ember-service-worker-asset-cache)
