@@ -9,6 +9,9 @@ _A pluggable approach to Service Workers for Ember.js_
 
 Please test this addon on your local/staging environment before deploying to production. Please report any errors or odd behaviour when testing!
 
+The addons is also undergoing a rewrite, the `0.6.0` beta series is only
+compatible with plugins that are also versioned at `0.6.0`.
+
 ## Batteries excluded
 
 Without any extra addons all this addon does is install a Service Worker,
