@@ -1,0 +1,24 @@
+---
+layout: default
+---
+
+<div class="row">
+  <div class="col-md-7">
+    {{content}}
+  </div>
+
+  <div class="col-md-4">
+    <nav>
+      {% for docpage in site.documentation %}
+        <p><a href="{{docpage.url}}">{{docpage.title}}</a></p>
+        {% if docpage.sections | size > 0 %}
+          <ul>
+            {% for section in docpage.sections %}
+              <li><a href="{{docpage.url}}#{{section.anchor}}">{{section.title}}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endfor %}
+    </nav>
+  </div>
+</div>

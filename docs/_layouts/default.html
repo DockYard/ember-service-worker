@@ -1,0 +1,18 @@
+---
+layout: master
+---
+
+<div class="header jumbotron">
+  <div class="container">
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}
+      <h2>{{ page.description}}</h2>
+    {% endif %}
+  </div>
+</div>
+
+<div class="content">
+  <div class="container">
+    {{content}}
+  </div>
+</div>

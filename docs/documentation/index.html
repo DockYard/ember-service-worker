@@ -1,0 +1,30 @@
+---
+layout: default
+title: Documentation
+permalink: /documentation/
+sections:
+  - title: "Installation"
+    anchor: "installation"
+---
+
+{% assign docs_size = site.documentation | size | minus: 1 %}
+
+{% for index in (0..docs_size) %}
+  {% assign index_mod = index | modulo: 3 %}
+  {% assign docpage = site.documentation[index] %}
+
+  {% if index_mod == 0 %}
+    <div class="row">
+  {% endif %}
+
+      <div class="col-lg-4">
+        <a href="{{docpage.url}}" class="card">
+          <h3>{{docpage.title}}</h3>
+          <p>{{docpage.description}}</p>
+        </a>
+      </div>
+
+  {% if index_mod == 2 or index == docs_size %}
+    </div>
+  {% endif %}
+{% endfor %}
