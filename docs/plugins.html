@@ -1,0 +1,18 @@
+---
+layout: default
+title: Plugins
+description: Curate a set of plugins that make the Service Worker function the way you want it to
+---
+
+{% for plugin in site.data.plugins %}
+  <div class="card">
+    <h3><a href="{{plugin.url}}">{{plugin.title}}</a></h3>
+    <p>
+      <strong>Author:</strong>
+      <a href="{{plugin.author.url}}">
+        {{plugin.author.name}}
+      </a>
+    </p>
+    <p>{{plugin.description}}</p>
+  </div>
+{% endfor %}

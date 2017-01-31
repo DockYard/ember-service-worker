@@ -11,7 +11,8 @@ layout: default
     <nav>
       {% for docpage in site.documentation %}
         <p><a href="{{docpage.url}}">{{docpage.title}}</a></p>
-        {% if docpage.sections | size > 0 %}
+        {% assign sections_size = docpage.sections | size %}
+        {% if sections_size > 0 %}
           <ul>
             {% for section in docpage.sections %}
               <li><a href="{{docpage.url}}#{{section.anchor}}">{{section.title}}</a></li>
