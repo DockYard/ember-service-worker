@@ -5,29 +5,22 @@ _A pluggable approach to Service Workers for Ember.js_
 [![Ember Observer Score](https://emberobserver.com/badges/ember-service-worker.svg)](https://emberobserver.com/addons/ember-service-worker)
 [![Build Status](https://travis-ci.org/DockYard/ember-service-worker.svg?branch=master)](https://travis-ci.org/DockYard/ember-service-worker)
 
+## Documentation Website
+
+[Visit the documentation website](http://ember-service-worker.com)
+
 ## 🚨 WARNING 🚨
 
-Please test this addon on your local/staging environment before deploying to production. Please report any errors or odd behaviour when testing!
+Please test this addon on your local/staging environment before deploying to
+production. Please report any errors or odd behaviour when testing!
 
 The addon has undergone a rewrite, the `0.6.0` series is only
 compatible with plugins that are also versioned at `0.6.0`.
-
-## Batteries excluded
-
-Without any extra addons all this addon does is install a Service Worker,
-but the Service Worker itself will do nothing.
-This allows you to craft a set of addons that make the Service Worker function the way you want it to.
 
 ## F#$& my assets aren't updating in development mode
 
 Turn on the "Update on reload" setting in the `Application > Service Workers`
 menu in the Chrome devtools.
-
-## Installation
-
-```
-ember install ember-service-worker
-```
 
 ## Available plugins
 
