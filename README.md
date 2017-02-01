@@ -9,14 +9,6 @@ _A pluggable approach to Service Workers for Ember.js_
 
 [Visit the documentation website](http://ember-service-worker.com)
 
-## Authors
-
-* [Marten Schilstra](http://twitter.com/martndemus)
-
-## Versioning
-
-This library follows [Semantic Versioning](http://semver.org)
-
 ## Want to help?
 
 Please do! We are always looking to improve this library. Please see our
