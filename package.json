@@ -9,6 +9,7 @@
   "scripts": {
     "test": "mocha node-tests"
   },
+  "homepage": "http://ember-service-worker.com",
   "repository": "https://github.com/DockYard/ember-service-worker",
   "engines": {
     "node": ">= 0.10.0"
