@@ -1,24 +1,24 @@
 - title: ember-service-worker-index
   description: An Ember Service Worker plugin that caches an Ember app's index file.
   url: https://github.com/DockYard/ember-service-worker-index
-  author:
+  maintainer:
     name: DockYard
     url: https://dockyard.com
 - title: ember-service-worker-asset-cache
   description: An Ember Service Worker plugin that caches an Ember app's asset files.
   url: https://github.com/DockYard/ember-service-worker-asset-cache
-  author:
+  maintainer:
     name: DockYard
     url: https://dockyard.com
 - title: ember-service-worker-cache-first
   description: A cache first Ember Service Worker plugin
   url: https://github.com/DockYard/ember-service-worker-cache-first
-  author:
+  maintainer:
     name: DockYard
     url: https://dockyard.com
 - title: ember-service-worker-cache-fallback
   description: An Ember Service Worker plugin that resorts to a cached fallback version when the network request fails
   url: https://github.com/DockYard/ember-service-worker-cache-fallback
-  author:
+  maintainer:
     name: DockYard
     url: https://dockyard.com
