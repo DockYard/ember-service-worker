@@ -70,6 +70,28 @@ body {
 
 }
 
+.documentation-nav {
+  ol {
+    list-style: none;
+    counter-reset: item;
+    padding-left: 1em;
+  }
+
+  & > ol {
+    padding-left: 0;
+  }
+
+  li { line-height: 1.5; }
+  & > ol > li {
+    margin-bottom: 1em;
+  }
+
+  li:before {
+    content: counters(item, ".") " ";
+    counter-increment: item
+  }
+}
+
 .footer {
   padding-top: 24px;
   padding-bottom: 24px;

@@ -1,7 +1,8 @@
 ---
 layout: doc_page
-title: Getting Started
+title: Getting started
 description: Make your app offline first in about 30 minutes
+order: 1
 sections:
   - anchor: installation
     title: Installation

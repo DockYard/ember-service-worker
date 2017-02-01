@@ -2,16 +2,14 @@
 layout: default
 title: Documentation
 permalink: /documentation/
-sections:
-  - title: "Installation"
-    anchor: "installation"
 ---
 
+{% assign docs = site.documentation | sort: "order" %}
 {% assign docs_size = site.documentation | size | minus: 1 %}
 
 {% for index in (0..docs_size) %}
   {% assign index_mod = index | modulo: 3 %}
-  {% assign docpage = site.documentation[index] %}
+  {% assign docpage = docs[index] %}
 
   {% if index_mod == 0 %}
     <div class="row">

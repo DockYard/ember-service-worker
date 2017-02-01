@@ -2,24 +2,35 @@
 layout: default
 ---
 
+{% assign docs = site.documentation | sort: "order" %}
+
 <div class="row">
   <div class="col-md-7">
     {{content}}
   </div>
 
   <div class="col-md-4">
-    <nav>
-      {% for docpage in site.documentation %}
-        <p><a href="{{docpage.url}}">{{docpage.title}}</a></p>
-        {% assign sections_size = docpage.sections | size %}
-        {% if sections_size > 0 %}
-          <ul>
-            {% for section in docpage.sections %}
-              <li><a href="{{docpage.url}}#{{section.anchor}}">{{section.title}}</a></li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-      {% endfor %}
+    <nav role="navigation" class="documentation-nav">
+      <ol>
+        {% for docpage in docs %}
+          <li>
+            <a href="{{docpage.url}}">{{docpage.title}}</a>
+
+            {% assign sections_size = docpage.sections | size %}
+            {% if sections_size > 0 %}
+              <ol>
+                {% for section in docpage.sections %}
+                  <li>
+                    <a href="{{docpage.url}}#{{section.anchor}}">
+                      {{section.title}}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ol>
+            {% endif %}
+          </li>
+        {% endfor %}
+      <ol>
     </nav>
   </div>
 </div>
