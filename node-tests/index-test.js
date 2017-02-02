@@ -63,43 +63,4 @@ describe('Index', function() {
       assert.equal(addons[0].name, 'two', 'The addon named "two" should be found');
     });
   });
-
-  describe('#_transpilePath', function() {
-    xit('transpiles a tree from given path', function() {
-      var project = generateProject('test-project', 'transpile-tree-test');
-
-      return transpilePath(project, 'a-path').then(function(results) {
-        var indexOfFile = results.files.indexOf('test-project/a-path/file.js');
-        assert.ok(indexOfFile >= 0, 'File is copied over');
-
-        var filePath = pathFromEntry(results.entries[indexOfFile]);
-        assert.equal(fs.readFileSync(filePath), 'var foo = 42;');
-      });
-    });
-
-    xit('returns only if the target path exists', function() {
-      var project = generateProject('test-project', 'transpile-tree-test');
-      assert.equal(addonIndex._transpilePath(project, 'b-path'), undefined);
-    });
-  });
-
-  describe('#_serviceWorkerTreeFor', function() {
-    xit('gets the service-worker directory', function() {
-      var project = generateProject('test-project', 'transpile-tree-test');
-      return serviceWorkerTreeFor(project).then(function(results) {
-        assert.ok(results.files.indexOf('test-project/service-worker/index.js') >= 0, 'index.js is copied over');
-        assert.ok(results.files.indexOf('test-project/service-worker/module.js') >= 0, 'other files are copied over');
-      });
-    });
-  });
-
-  describe('#_serviceWorkerRegistrationTreeFor', function() {
-    xit('gets the service-worker-registration directory', function() {
-      var project = generateProject('test-project', 'transpile-tree-test');
-      return serviceWorkerRegistrationTreeFor(project).then(function(results) {
-        assert.ok(results.files.indexOf('test-project/service-worker-registration/index.js') >= 0, 'index.js is copied over');
-        assert.ok(results.files.indexOf('test-project/service-worker-registration/module.js') >= 0, 'other files are copied over');
-      });
-    });
-  });
 });
