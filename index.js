@@ -64,8 +64,9 @@ module.exports = {
       return this._projectRootURL;
     }
 
+    let customOptions = this.app.options['ember-service-worker'] || {};
     let config = this.project.config(this.app.env);
-    let rootURL = config.rootURL || config.baseURL || '/';
+    let rootURL = customOptions.rootUrl || config.rootURL || config.baseURL || '/';
 
     return this._projectRootURL = rootURL;
   },
