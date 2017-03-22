@@ -76,7 +76,7 @@ module.exports = {
   contentFor(type, config) {
     let options = this.app.options['ember-service-worker'];
 
-    if (config.env === 'test') {
+    if (config.environment === 'test') {
       return;
     }
 
