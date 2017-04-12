@@ -5,6 +5,7 @@ const mergeTrees = require('broccoli-merge-trees');
 const writeFile = require('broccoli-file-creator');
 const hashForDep = require('hash-for-dep');
 const addonUtils = require('./lib/addon-utils');
+const IndexFile = require('./lib/index-file');
 
 module.exports = {
   name: 'ember-service-worker',
@@ -55,7 +56,8 @@ module.exports = {
       appTree,
       minifyJS: this.app.options.minifyJS,
       plugins,
-      projectVersion: hashForDep(this.project.root),
+      projectVersion: this.project.pkg.version,
+      projectRevision: hashForDep(this.project.root),
       rootURL: this._getRootURL(),
       sourcemaps: this.app.options.sourcemaps
     });
@@ -85,6 +87,13 @@ module.exports = {
     if (type === 'head-footer' && options.registrationStrategy === 'async') {
       return `<script async src="${this._getRootURL()}sw-registration.js"></script>`;
     }
+  },
+
+  treeForServiceWorker(swTree, appTree) {
+    var options = this.app.options['ember-service-worker'] || {};
+    var indexFile = new IndexFile([appTree], options);
+
+    return mergeTrees([swTree, indexFile]);
   },
 
   _getRootURL() {
