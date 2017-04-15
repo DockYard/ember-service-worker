@@ -25,7 +25,7 @@ module.exports = {
     let options = this.app.options['ember-service-worker'] =  this.app.options['ember-service-worker'] || {}
     options.registrationStrategy = options.registrationStrategy || 'default';
 
-    if (options.registrationStrategy === 'after-ember' && !process.env.EMBER_CLI_FASTBOOT && this.app.env !== 'test') {
+    if (options.registrationStrategy === 'after-ember' && this.app.env !== 'test') {
       app.import('vendor/ember-service-worker/load-registration-script.js');
     }
   },
@@ -33,9 +33,11 @@ module.exports = {
   treeForVendor() {
     return writeFile('ember-service-worker/load-registration-script.js', `
       (function() {
-        var script = document.createElement('script')
-        script.src = '${this._getRootURL()}sw-registration.js';
-        document.body.appendChild(script);
+        if (typeof FastBoot === 'undefined') {
+          var script = document.createElement('script')
+          script.src = '${this._getRootURL()}sw-registration.js';
+          document.body.appendChild(script);
+        }
       })();
     `);
   },
