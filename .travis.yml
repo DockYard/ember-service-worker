@@ -14,6 +14,7 @@ cache:
 
 env:
   - TEST_SCENARIO=test
+  - TEST_SCENARIO=fastboottest
 
 matrix:
   fast_finish: true
