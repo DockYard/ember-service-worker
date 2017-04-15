@@ -21,7 +21,7 @@
     "broccoli-test-helpers": "0.0.9",
     "chai": "^3.5.0",
     "ember-cli": "2.12.0",
-    "ember-fastboot-addon-tests": "0.3.0",
+    "ember-fastboot-addon-tests": "^0.3.1",
     "mocha": "^2.5.3",
     "rimraf": "^2.5.3"
   },
