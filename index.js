@@ -25,7 +25,7 @@ module.exports = {
     let options = this.app.options['ember-service-worker'] =  this.app.options['ember-service-worker'] || {}
     options.registrationStrategy = options.registrationStrategy || 'default';
 
-    if (options.registrationStrategy === 'after-ember' && !process.env.EMBER_CLI_FASTBOOT) {
+    if (options.registrationStrategy === 'after-ember' && !process.env.EMBER_CLI_FASTBOOT && this.app.env !== 'test') {
       app.import('vendor/ember-service-worker/load-registration-script.js');
     }
   },
