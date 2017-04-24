@@ -3,5 +3,8 @@
   "keywords": [
     "ember-addon",
     "ember-service-worker-plugin"
-  ]
+  ],
+  "dependencies": {
+    "ember-cli-babel": "^5.1.7"
+  }
 }
