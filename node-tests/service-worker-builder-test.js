@@ -61,26 +61,6 @@ describe('Service Worker Builder', () => {
       });
   });
 
-  it('transpiles code with babel', () => {
-    let plugins = [generatePlugin('test-project', 'builder-test/babel')];
-    return build({ app, plugins }, 'service-worker')
-      .then((results) => {
-        let expected = `
-(function () {
-  'use strict';
-
-  var CONSTANT = 42;
-  self.addEventListener('fetch', function () {
-    var x = CONSTANT + 1;
-  });
-
-}());
-`.trim();
-
-        assert.equal(readFile(results, 'sw.js'), expected);
-      });
-  });
-
   it('uses rollup to concat all modules in a file', () => {
     let plugins = [
       generatePlugin('plugin-a', 'builder-test/rollup/plugin-a'),
@@ -93,16 +73,17 @@ describe('Service Worker Builder', () => {
 (function () {
   'use strict';
 
-  var CONSTANT = 42;
+  const CONSTANT = 42;
 
-  self.addEventListener('fetch', function () {
-    var x = CONSTANT + 1;
+  self.addEventListener('fetch', function() {
+    let x = CONSTANT + 1;
   });
 
 }());
 `.trim();
 
-        assert.equal(readFile(results, 'sw.js'), expected);
+        let file = readFile(results, 'sw.js').toString('utf8');
+        assert.equal(file, expected);
       });
   });
 
