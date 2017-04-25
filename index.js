@@ -58,8 +58,6 @@ module.exports = {
       appTree,
       minifyJS: this.app.options.minifyJS,
       plugins,
-      projectVersion: this.project.pkg.version,
-      projectRevision: hashForDep(this.project.root),
       rootURL: this._getRootURL(),
       sourcemaps: this.app.options.sourcemaps
     });
@@ -93,6 +91,9 @@ module.exports = {
 
   treeForServiceWorker(swTree, appTree) {
     var options = this.app.options['ember-service-worker'] || {};
+    options.projectVersion = this.project.pkg.version;
+    options.projectRevision = hashForDep(this.project.root);
+
     var indexFile = new IndexFile([appTree], options);
 
     return mergeTrees([swTree, indexFile]);
