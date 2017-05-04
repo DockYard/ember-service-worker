@@ -25,7 +25,15 @@ module.exports = {
     let options = this.app.options['ember-service-worker'] =  this.app.options['ember-service-worker'] || {}
     options.registrationStrategy = options.registrationStrategy || 'default';
 
-    if (options.registrationStrategy === 'after-ember' && this.app.env !== 'test') {
+    if (options.enabled === undefined) {
+      options.enabled = this.app.env !== 'test';
+    }
+
+    if (process.env.SW_DISABLED) {
+      options.enabled = false;
+    }
+
+    if (options.registrationStrategy === 'after-ember' && options.enabled !== false) {
       app.import('vendor/ember-service-worker/load-registration-script.js');
     }
   },
@@ -43,7 +51,9 @@ module.exports = {
   },
 
   postprocessTree(type, appTree) {
-    if (type !== 'all') {
+    let options = this._getOptions();
+
+    if (type !== 'all' || options.enabled === false) {
       return appTree;
     }
 
@@ -74,9 +84,9 @@ module.exports = {
   },
 
   contentFor(type, config) {
-    let options = this.app.options['ember-service-worker'];
+    let options = this._getOptions();
 
-    if (config.environment === 'test') {
+    if (options.enabled === false) {
       return;
     }
 
@@ -90,7 +100,7 @@ module.exports = {
   },
 
   treeForServiceWorker(swTree, appTree) {
-    var options = this.app.options['ember-service-worker'] || {};
+    var options = this._getOptions();
     options.projectVersion = this.project.pkg.version;
     options.projectRevision = hashForDep(this.project.root);
 
@@ -104,11 +114,19 @@ module.exports = {
       return this._projectRootURL;
     }
 
-    let customOptions = this.app.options['ember-service-worker'] || {};
-    let config = this.project.config(this.app.env);
-    let rootURL = customOptions.rootUrl || config.rootURL || config.baseURL || '/';
+    let options = this._getOptions();
+    let config = this._getConfig();
+    let rootURL = options.rootUrl || config.rootURL || config.baseURL || '/';
 
     return this._projectRootURL = rootURL;
+  },
+
+  _getOptions() {
+    return this.app.options['ember-service-worker'];
+  },
+
+  _getConfig() {
+    return this.project.config(this.app.env);
   },
 
   _findPluginsFor(project) {
