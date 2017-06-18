@@ -69,7 +69,8 @@ module.exports = {
       minifyJS: this.app.options.minifyJS,
       plugins,
       rootURL: this._getRootURL(),
-      sourcemaps: this.app.options.sourcemaps
+      sourcemaps: this.app.options.sourcemaps,
+      serviceWorkerFileName: this._getServiceWorkerFileName(),
     });
 
     let serviceWorkerTree = serviceWorkerBuilder.build('service-worker');
@@ -119,6 +120,12 @@ module.exports = {
     let rootURL = options.rootUrl || config.rootURL || config.baseURL || '/';
 
     return this._projectRootURL = rootURL;
+  },
+
+  _getServiceWorkerFileName() {
+    let options = this._getOptions();
+
+    return options.serviceWorkerFileName || 'sw.js';
   },
 
   _getOptions() {
