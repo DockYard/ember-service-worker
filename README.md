@@ -1,5 +1,7 @@
 # Ember Service Worker
 
+**[ember-service-worker is built and maintained by DockYard, contact us for expert Ember.js consulting](https://dockyard.com/ember-consulting)**.
+
 _A pluggable approach to Service Workers for Ember.js_
 
 [![Ember Observer Score](https://emberobserver.com/badges/ember-service-worker.svg)](https://emberobserver.com/addons/ember-service-worker)
