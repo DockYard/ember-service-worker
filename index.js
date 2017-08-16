@@ -102,7 +102,12 @@ module.exports = {
   treeForServiceWorker(swTree, appTree) {
     var options = this._getOptions();
     options.projectVersion = this.project.pkg.version;
-    options.projectRevision = hashForDep(this.project.root);
+
+    try {
+      options.projectRevision = hashForDep(this.project.root);
+    } catch (e) {
+      options.projectRevision = '0';
+    }
 
     var indexFile = new IndexFile([appTree], options);
 
