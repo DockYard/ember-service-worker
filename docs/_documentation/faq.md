@@ -1,7 +1,7 @@
 ---
 layout: doc_page
 title: Frequently Asked Questions
-order: 3
+order: 4
 ---
 
 ### I don't see any changes in development mode
