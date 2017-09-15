@@ -35,7 +35,7 @@
     "broccoli-file-creator": "^1.1.1",
     "broccoli-funnel": "^1.0.3",
     "broccoli-merge-trees": "1.1.1",
-    "broccoli-plugin": "^1.3.0",
+    "broccoli-caching-writer": "^3.0.3",
     "broccoli-rollup": "0.0.4",
     "broccoli-uglify-sourcemap": "^1.5.1",
     "clone": "^1.0.2",

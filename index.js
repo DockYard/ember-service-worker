@@ -1,6 +1,7 @@
 'use strict';
 
 const ServiceWorkerBuilder = require('./lib/service-worker-builder');
+const InlineRegistration = require('./lib/inline-registration');
 const mergeTrees = require('broccoli-merge-trees');
 const writeFile = require('broccoli-file-creator');
 const hashForDep = require('hash-for-dep');
@@ -76,10 +77,14 @@ module.exports = {
     let serviceWorkerRegistrationTree =
       serviceWorkerBuilder.build('service-worker-registration');
 
+    if (options.registrationStrategy === 'inline') {
+      serviceWorkerRegistrationTree = new InlineRegistration([appTree, serviceWorkerRegistrationTree], options);
+    }
+
     return mergeTrees([
+      appTree,
       serviceWorkerTree,
-      serviceWorkerRegistrationTree,
-      appTree
+      serviceWorkerRegistrationTree
     ], { overwrite: true });
   },
 
@@ -90,8 +95,14 @@ module.exports = {
       return;
     }
 
-    if (type === 'body-footer' && options.registrationStrategy === 'default') {
-      return `<script src="${this._getRootURL()}sw-registration.js"></script>`;
+    if (type === 'body-footer') {
+      if (options.registrationStrategy === 'default') {
+        return `<script src="${this._getRootURL()}sw-registration.js"></script>`;
+      }
+
+      if (options.registrationStrategy === 'inline') {
+        return `<script>ESW_INLINE_PLACEHOLDER</script>`;
+      }
     }
 
     if (type === 'head-footer' && options.registrationStrategy === 'async') {
