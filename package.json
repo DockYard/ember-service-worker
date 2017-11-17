@@ -32,7 +32,6 @@
     "service worker"
   ],
   "dependencies": {
-    "broccoli-babel-transpiler": "^6.1.2",
     "broccoli-file-creator": "^1.1.1",
     "broccoli-funnel": "^1.0.3",
     "broccoli-merge-trees": "1.1.1",
