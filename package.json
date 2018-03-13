@@ -42,7 +42,7 @@
     "ember-cli-babel": "^5.1.6",
     "exists-sync": "0.0.3",
     "glob": "^7.1.1",
-    "hash-for-dep": "^1.0.2",
+    "hash-for-dep": "^1.2.3",
     "rollup-plugin-replace": "^1.1.1"
   },
   "ember-addon": {
