@@ -19,7 +19,7 @@ The problem is that not every update to your app will result in a change to the
 force a change to the `sw.js` file when building. This is done by setting the
 `versionStrategy` property in your `ember-cli-build.js` file. An example:
 
-{% highlight javascript %}
+```js
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
@@ -31,7 +31,7 @@ module.exports = function(defaults) {
 
   return app.toTree();
 };
-{% endhighlight %}
+```
 
 In the example the strategy is set to `every-build`, this is a very safe
 strategy, because it will force a change to your `sw.js` file everytime you do a
@@ -53,7 +53,7 @@ default the registration file `sw-registration.js` is loaded using a simple
 script tag in the bottom of the body tag. You can change this by setting the
 `registrationStrategy` property in your `ember-cli-build.js` file. For example:
 
-{% highlight javascript %}
+```js
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
@@ -65,7 +65,7 @@ module.exports = function(defaults) {
 
   return app.toTree();
 };
-{% endhighlight %}
+```
 
 In the example the strategy is set to `inline`, this will write the contents of
 the registration script into the `index.html` file instead. If your registration
@@ -84,7 +84,7 @@ command.
 
 To disable the Service Worker in your `ember-cli-build.js` file:
 
-{% highlight javascript %}
+```js
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
@@ -96,10 +96,10 @@ module.exports = function(defaults) {
 
   return app.toTree();
 };
-{% endhighlight %}
+```
 
 To disable the Service Worker on the command line:
 
-{% highlight shell %}
+```sh
 SW_DISABLED=true ember serve
-{% endhighlight %}
+```
