@@ -35,7 +35,7 @@ module.exports = function(defaults) {
 
 In the example the strategy is set to `every-build`, this is a very safe
 strategy, because it will force a change to your `sw.js` file everytime you do a
-new build.
+new build. This is also the strategy  what Ember Service Worker defaults to.
 
 There are two other options to this: `project-revision` and `project-version`.
 
