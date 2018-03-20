@@ -68,9 +68,11 @@ module.exports = {
       app: this,
       appTree,
       minifyJS: this.app.options.minifyJS,
+      fingerprint: this.app.options.fingerprint.enabled,
       plugins,
       rootURL: this._getRootURL(),
-      sourcemaps: this.app.options.sourcemaps
+      sourcemaps: this.app.options.sourcemaps,
+      registrationDistPath: options.registrationDistPath
     });
 
     let serviceWorkerTree = serviceWorkerBuilder.build('service-worker');
@@ -95,9 +97,16 @@ module.exports = {
       return;
     }
 
+    let registrationDistPath = options.registrationDistPath;
+    let srcPath = 'sw-registration.js';
+
+    if (registrationDistPath) {
+      srcPath = `${registrationDistPath}/${srcPath}`;
+    }
+
     if (type === 'body-footer') {
       if (options.registrationStrategy === 'default') {
-        return `<script src="${this._getRootURL()}sw-registration.js"></script>`;
+        return `<script src="${this._getRootURL()}${srcPath}"></script>`;
       }
 
       if (options.registrationStrategy === 'inline') {
@@ -106,7 +115,7 @@ module.exports = {
     }
 
     if (type === 'head-footer' && options.registrationStrategy === 'async') {
-      return `<script async src="${this._getRootURL()}sw-registration.js"></script>`;
+      return `<script async src="${this._getRootURL()}${srcPath}"></script>`;
     }
   },
 

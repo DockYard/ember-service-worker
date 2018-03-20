@@ -51,6 +51,7 @@
       "ember": ">1.13.0 <3.0.0"
     },
     "before": [
+      "broccoli-asset-rev",
       "ember-cli-sri"
     ]
   }
