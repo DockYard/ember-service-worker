@@ -18,3 +18,7 @@ testem.log
 
 # jekyll docs
 /docs/_site
+
+# lockfiles
+package-lock.json
+yarn.lock
