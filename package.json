@@ -39,7 +39,7 @@
     "broccoli-rollup": "0.0.4",
     "broccoli-uglify-sourcemap": "^1.5.1",
     "clone": "^1.0.2",
-    "ember-cli-babel": "^5.1.6",
+    "ember-cli-babel": "^6.12.0",
     "exists-sync": "0.0.3",
     "glob": "^7.1.1",
     "hash-for-dep": "^1.2.3",
