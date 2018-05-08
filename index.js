@@ -110,7 +110,7 @@ module.exports = {
       }
 
       if (options.registrationStrategy === 'inline') {
-        return `<script>ESW_INLINE_PLACEHOLDER</script>`;
+        return `<!-- ESW_INLINE_PLACEHOLDER -->`;
       }
     }
 
