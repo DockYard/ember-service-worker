@@ -67,17 +67,17 @@ describe('Service Worker Builder', () => {
       .then((results) => {
         let expected = `
 (function () {
-  'use strict';
+'use strict';
 
-  var CONSTANT = 42;
-  self.addEventListener('fetch', function () {
-    var x = CONSTANT + 1;
-  });
+var CONSTANT = 42;
+self.addEventListener('fetch', function () {
+  var x = CONSTANT + 1;
+});
 
 }());
 `.trim();
 
-        let file = readFile(results, 'sw.js').toString('utf8');
+        let file = readFile(results, 'sw.js').toString('utf8').trim();
         assert.equal(file, expected);
       });
   });
@@ -92,18 +92,18 @@ describe('Service Worker Builder', () => {
       .then((results) => {
         let expected = `
 (function () {
-  'use strict';
+'use strict';
 
-  var CONSTANT = 42;
+var CONSTANT = 42;
 
-  self.addEventListener('fetch', function () {
-    var x = CONSTANT + 1;
-  });
+self.addEventListener('fetch', function () {
+  var x = CONSTANT + 1;
+});
 
 }());
 `.trim();
 
-        let file = readFile(results, 'sw.js').toString('utf8');
+        let file = readFile(results, 'sw.js').toString('utf8').trim();
         assert.equal(file, expected);
       });
   });
