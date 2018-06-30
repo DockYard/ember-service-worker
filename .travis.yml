@@ -1,16 +1,17 @@
 ---
 language: node_js
 node_js:
-  - "4"
   - "6"
   - "stable"
 
-sudo: false
+sudo: required
+dist: trusty
 
 cache:
   directories:
     - node_modules
     - node-tests/fixtures/simple-app/node_modules
+    - chrome-linux
 
 env:
   - TEST_SCENARIO=test
@@ -29,6 +30,12 @@ before_install:
 install:
   - cd node-tests/fixtures/simple-app && npm install $(npm pack ../../..) && npm install && bower install && cd -
   - npm install
+
+before_script:
+  - export DISPLAY=:99.0
+  - export LIGHTHOUSE_CHROMIUM_PATH="$(pwd)/chrome-linux/chrome"
+  - sh -e /etc/init.d/xvfb start
+  - ./scripts/download-chrome.sh
 
 script:
   - npm run $TEST_SCENARIO
