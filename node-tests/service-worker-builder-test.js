@@ -5,6 +5,8 @@ var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
 var helpers = require('broccoli-test-helpers');
+var Babel = require('broccoli-babel-transpiler');
+var EmberCliBabel = require('ember-cli-babel');
 
 var cleanupBuilders = helpers.cleanupBuilders;
 
@@ -37,7 +39,22 @@ describe('Service Worker Builder', () => {
 
     app = {
       treeGenerator: (dir) => dir,
-      project: { },
+      project: {
+        addons: [
+          {
+            name: 'ember-cli-babel',
+            transpileTree(tree, options) {
+              return new Babel(tree, {
+                annotation: "Babel: app-with-sw",
+                babelrc: false,
+                highlightCode: false,
+                sourceMaps: false,
+                plugins: EmberCliBabel._getPresetEnvPlugins({ 'ember-cli-babel': { compileModules: false } })
+              });
+            }
+          }
+        ]
+      },
     };
   });
 
