@@ -15,6 +15,7 @@
 /libpeerconnection.log
 npm-debug.log
 testem.log
+/node-tests/fixtures/simple-app/ember-service-worker.tgz
 
 # jekyll docs
 /docs/_site
