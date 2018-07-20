@@ -10,9 +10,11 @@
   },
   "repository": "",
   "scripts": {
+    "preinstall": "npm run update-package",
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test"
+    "test": "ember test",
+    "update-package": "mv $(npm pack ../../..) ember-service-worker.tgz"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
@@ -33,7 +35,7 @@
     "ember-export-application-global": "^1.0.5",
     "ember-load-initializers": "^0.6.0",
     "ember-resolver": "^2.0.3",
-    "ember-service-worker": "file:../../..",
+    "ember-service-worker": "file:ember-service-worker.tgz",
     "ember-source": "~2.12.0",
     "ember-welcome-page": "^2.0.2",
     "loader.js": "^4.2.3"

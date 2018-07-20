@@ -27,7 +27,6 @@ before_install:
   - npm install -g bower
 
 install:
-  - cd node-tests/fixtures/simple-app && npm install $(npm pack ../../..) && npm install && bower install && cd -
   - npm install
 
 script:
