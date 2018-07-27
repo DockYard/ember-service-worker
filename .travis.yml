@@ -9,6 +9,7 @@ sudo: false
 
 cache:
   directories:
+    - $HOME/.npm
     - node_modules
     - node-tests/fixtures/simple-app/node_modules
 
@@ -22,9 +23,8 @@ matrix:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
 before_install:
-  - if [[ $(npm -v | cut -d '.' -f 1) -lt 3 ]]; then npm i -g npm@^3; fi
-  - npm config set spin false
-  - npm install -g bower
+  - npm install -g npm@4
+  - npm --version
 
 install:
   - npm install
