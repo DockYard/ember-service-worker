@@ -49,7 +49,9 @@ describe('Service Worker Builder', () => {
                 babelrc: false,
                 highlightCode: false,
                 sourceMaps: false,
-                plugins: EmberCliBabel._getPresetEnvPlugins({ 'ember-cli-babel': { compileModules: false } })
+                presets: [
+                  EmberCliBabel._getPresetEnvPlugins({ 'ember-cli-babel': { compileModules: false } }),
+                ].filter(Boolean)
               });
             }
           }
