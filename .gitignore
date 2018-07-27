@@ -13,9 +13,15 @@
 /connect.lock
 /coverage/*
 /libpeerconnection.log
-npm-debug.log
+npm-debug.log*
+yarn-error.log*
 testem.log
 /node-tests/fixtures/simple-app/ember-service-worker.tgz
 
 # jekyll docs
 /docs/_site
+
+# ember-try
+.node_modules.ember-try/
+bower.json.ember-try
+package.json.ember-try
