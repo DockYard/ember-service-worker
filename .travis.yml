@@ -23,7 +23,6 @@ matrix:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
 before_install:
-  - npm install -g npm@4
   - npm --version
 
 install:
