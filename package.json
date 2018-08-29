@@ -36,14 +36,16 @@
     "broccoli-funnel": "^2.0.1",
     "broccoli-merge-trees": "1.2.4",
     "broccoli-caching-writer": "^3.0.3",
-    "broccoli-rollup": "0.0.4",
+    "broccoli-rollup": "^2.1.1",
     "broccoli-uglify-sourcemap": "^1.5.1",
     "clone": "^1.0.2",
     "ember-cli-babel": "^6.16.0",
     "exists-sync": "0.0.3",
     "glob": "^7.1.1",
     "hash-for-dep": "^1.2.3",
-    "rollup-plugin-replace": "^1.1.1"
+    "rollup-plugin-commonjs": "^9.1.6",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-replace": "^2.0.0"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config",
