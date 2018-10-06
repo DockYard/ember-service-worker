@@ -14,7 +14,7 @@
     "build": "ember build",
     "start": "ember server",
     "test": "ember test",
-    "update-package": "mv $(npm pack ../../..) ember-service-worker.tgz"
+    "update-package": "cp ../ember-service-worker.tgz ember-service-worker.tgz"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",

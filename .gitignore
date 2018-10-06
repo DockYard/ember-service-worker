@@ -16,6 +16,7 @@
 npm-debug.log*
 yarn-error.log*
 testem.log
+/node-tests/fixtures/ember-service-worker.tgz
 /node-tests/fixtures/simple-app/ember-service-worker.tgz
 /node-tests/fixtures/simple-app/package-lock.json
 /node-tests/fixtures/tmp/*

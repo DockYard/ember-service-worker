@@ -12,7 +12,7 @@
   },
   "scripts": {
     "preinstall": "npm run update-package",
-    "update-package": "mv $(npm pack ../../../) ember-service-worker.tgz",
+    "update-package": "cp ../ember-service-worker.tgz ember-service-worker.tgz",
     "ember": "EMBER_CLI_MODULE_UNIFICATION=true node_modules/.bin/ember",
     "build": "EMBER_CLI_MODULE_UNIFICATION=true node_modules/.bin/ember build",
     "lint:hbs": "ember-template-lint .",
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@ember/jquery": "^0.5.2",
-    "@ember/optional-features": "^0.6.3",
+    "@ember/optional-features": "^0.7.0",
     "broccoli-asset-rev": "^2.7.0",
     "ember-ajax": "^3.1.0",
     "ember-cli": "github:ember-cli/ember-cli#2805962d1c9188ef36ca7f9abec360cbebbd47a6",
@@ -51,5 +51,10 @@
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
+  },
+  "ember-addon": {
+    "paths": [
+      "lib/ember-service-worker-test"
+    ]
   }
 }
