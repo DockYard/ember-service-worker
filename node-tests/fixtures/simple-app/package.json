@@ -10,11 +10,9 @@
   },
   "repository": "",
   "scripts": {
-    "preinstall": "npm run update-package",
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test",
-    "update-package": "cp ../ember-service-worker.tgz ember-service-worker.tgz"
+    "test": "ember test"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",

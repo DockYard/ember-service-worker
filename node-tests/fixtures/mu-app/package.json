@@ -11,8 +11,6 @@
     "test": "tests"
   },
   "scripts": {
-    "preinstall": "npm run update-package",
-    "update-package": "cp ../ember-service-worker.tgz ember-service-worker.tgz",
     "ember": "EMBER_CLI_MODULE_UNIFICATION=true node_modules/.bin/ember",
     "build": "EMBER_CLI_MODULE_UNIFICATION=true node_modules/.bin/ember build",
     "lint:hbs": "ember-template-lint .",

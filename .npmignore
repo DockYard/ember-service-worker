@@ -1,6 +1,8 @@
+
 # compiled output
 /dist/
 /tmp/
+/node-tests
 
 # dependencies
 /bower_components/
