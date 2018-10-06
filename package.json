@@ -2,28 +2,29 @@
   "name": "ember-service-worker",
   "version": "0.7.0",
   "description": "A pluggable approach to Service Workers for Ember.js",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
   "scripts": {
     "pretest": "cd node-tests/fixtures/simple-app && npm run update-package && npm install ember-service-worker.tgz && npm install && cd ../mu-app && npm run update-package && npm install ember-service-worker.tgz && npm install",
-    "test": "mocha node-tests",
+    "lint:hbs": "ember-template-lint .",
+    "test": "ember test",
+    "test:all": "ember try:each",
     "fastboottest": "ember fastboot:test"
   },
   "homepage": "http://ember-service-worker.com",
-  "repository": "https://github.com/DockYard/ember-service-worker",
   "engines": {
-    "node": "^ 4.5 || 6.* || >= 7.*"
+    "node": "6.* || 8.* || >= 10.*"
   },
-  "author": "Marten Schilstra <mail@martenschilstra.nl>",
-  "license": "MIT",
   "devDependencies": {
+    "@ember/optional-features": "^0.6.3",
     "broccoli-test-helpers": "0.0.9",
     "chai": "^3.5.0",
-    "ember-cli": "~2.18.0",
+    "ember-cli": "~3.4.3",
+    "ember-cli-template-lint": "^1.0.0-beta.1",
     "ember-fastboot-addon-tests": "^0.4.0",
+    "ember-maybe-import-regenerator": "^0.1.6",
+    "ember-source-channel-url": "^1.1.0",
+    "ember-try": "^1.0.0",
     "mocha": "^2.5.3",
+    "qunit-dom": "^0.7.1",
     "rimraf": "^2.5.3"
   },
   "keywords": [
@@ -31,6 +32,13 @@
     "ember-service-worker",
     "service worker"
   ],
+  "repository": "https://github.com/DockYard/ember-service-worker",
+  "license": "MIT",
+  "author": "Marten Schilstra <mail@martenschilstra.nl>",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
   "dependencies": {
     "broccoli-caching-writer": "^3.0.3",
     "broccoli-file-creator": "^2.1.1",
