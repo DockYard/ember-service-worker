@@ -1,10 +1,14 @@
 export const PROJECT_REVISION = '{{PROJECT_REVISION}}';
 
+const ROOT_URL = '{{ROOT_URL}}';
+
 let SUCCESS_HANDLERS = [];
 let ERROR_HANDLERS = [];
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('{{ROOT_URL}}sw.js', { scope: '{{ROOT_URL}}' })
+  let swPath = ROOT_URL + 'sw.js';
+
+  navigator.serviceWorker.register(swPath, { scope: ROOT_URL })
     .then(function(reg) {
       let current = Promise.resolve();
 

@@ -32,10 +32,10 @@
     "service worker"
   ],
   "dependencies": {
+    "broccoli-caching-writer": "^3.0.3",
     "broccoli-file-creator": "^2.1.1",
     "broccoli-funnel": "^2.0.1",
     "broccoli-merge-trees": "1.2.4",
-    "broccoli-caching-writer": "^3.0.3",
     "broccoli-rollup": "0.0.4",
     "broccoli-uglify-sourcemap": "^1.5.1",
     "clone": "^1.0.2",

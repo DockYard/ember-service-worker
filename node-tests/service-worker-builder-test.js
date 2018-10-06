@@ -80,6 +80,17 @@ describe('Service Worker Builder', () => {
       });
   });
 
+  it('replaces {{ROOT_URL}} with the actual root url', () => {
+    let plugins = [generatePlugin('test-project', 'builder-test')];
+
+    return build({ app, plugins }, 'service-worker-registration')
+      .then((results) => {
+        let file = readFile(results, 'sw-registration.js').toString('utf8');
+
+        assert.notOk(file.includes('{{ROOT_URL}}'));
+      });
+  });
+
   it('transpiles code with babel', () => {
     let plugins = [generatePlugin('test-project', 'builder-test/babel')];
     return build({ app, plugins }, 'service-worker')

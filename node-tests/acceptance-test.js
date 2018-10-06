@@ -40,7 +40,16 @@ describe('Acceptance Tests', function() {
     it('transpiles and concatenates (rollup) all registration files in a plugin into sw-registration.js', function() {
       contains(dist('sw-registration.js'), "self.hello = 'Hello from Ember Service Worker Test';");
     });
+
+    it('transpiles registration files such that {{ROOT_URL}} is replaced', function() {
+      doesNotContain(dist('sw-registration.js'), '{{ROOT_URL}}');
+    });
   });
+
+  context('A Module Unification App', function() {
+
+  });
+
 });
 
 function runEmberCommand(packagePath, command) {
@@ -64,4 +73,12 @@ function exists(path) {
 
 function contains(path, content) {
   assert.ok(fs.readFileSync(path).toString().indexOf(content) > -1, path + ' contains ' + content);
+}
+
+function doesNotContain(path, content) {
+  const fileContents = fs.readFileSync(path).toString();
+
+  assert.notOk(
+    fileContents.indexOf(content) > -1,
+    path + ' does not contain ' + content + '\n\nFile contents:\n' + fileContents);
 }
