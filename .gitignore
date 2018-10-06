@@ -20,6 +20,10 @@ testem.log
 /node-tests/fixtures/simple-app/package-lock.json
 /node-tests/fixtures/tmp/*
 
+/node-tests/fixtures/mu-app/ember-service-worker.tgz
+/node-tests/fixtures/mu-app/package-lock.json
+/node-tests/fixtures/tmp/*
+
 # jekyll docs
 /docs/_site
 
