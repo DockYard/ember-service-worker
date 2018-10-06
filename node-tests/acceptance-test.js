@@ -4,7 +4,7 @@ var path = require('path');
 var rimraf = require('rimraf').sync;
 var spawnSync = require('child_process').spawnSync;
 
-var emberCLIPath = path.resolve(__dirname, './fixtures/simple-app/node_modules/ember-cli/bin/ember');
+var emberCLIPath = (fixturePath) => path.resolve(__dirname, fixturePath + '/node_modules/ember-cli/bin/ember');
 
 describe('Acceptance Tests', function() {
   this.timeout(120000);
@@ -47,13 +47,29 @@ describe('Acceptance Tests', function() {
   });
 
   context('A Module Unification App', function() {
+    var fixturePath = path.resolve(__dirname, './fixtures/mu-app');
 
+    function dist(file) {
+      return path.join(fixturePath, 'dist', file);
+    }
+
+    before(function() {
+      runEmberCommand(fixturePath, ['build']);
+    });
+
+    after(function() {
+      cleanup(fixturePath);
+    });
+
+    it('transpiles registration files such that {{ROOT_URL}} is replaced', function() {
+      doesNotContain(dist('sw-registration.js'), '{{ROOT_URL}}');
+    });
   });
 
 });
 
 function runEmberCommand(packagePath, command) {
-  var result = spawnSync(emberCLIPath, command, {
+  var result = spawnSync(emberCLIPath(packagePath), command, {
     cwd: packagePath
   });
 

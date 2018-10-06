@@ -1,0 +1,55 @@
+{
+  "name": "codesandbox-ember-module-unification-template",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Small description for codesandbox-ember-module-unification-template goes here",
+  "repository": "",
+  "license": "MIT",
+  "author": "",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "preinstall": "npm run update-package",
+    "update-package": "mv $(npm pack ../../../) ember-service-worker.tgz",
+    "ember": "EMBER_CLI_MODULE_UNIFICATION=true node_modules/.bin/ember",
+    "build": "EMBER_CLI_MODULE_UNIFICATION=true node_modules/.bin/ember build",
+    "lint:hbs": "ember-template-lint .",
+    "lint:js": "eslint .",
+    "start": "npm run ember serve",
+    "test": "npm run ember test"
+  },
+  "devDependencies": {
+    "@ember/jquery": "^0.5.2",
+    "@ember/optional-features": "^0.6.3",
+    "broccoli-asset-rev": "^2.7.0",
+    "ember-ajax": "^3.1.0",
+    "ember-cli": "github:ember-cli/ember-cli#2805962d1c9188ef36ca7f9abec360cbebbd47a6",
+    "ember-cli-app-version": "^3.2.0",
+    "ember-cli-babel": "^6.16.0",
+    "ember-cli-dependency-checker": "^3.0.0",
+    "ember-cli-eslint": "^4.2.3",
+    "ember-cli-htmlbars": "^3.0.0",
+    "ember-cli-htmlbars-inline-precompile": "^1.0.3",
+    "ember-cli-inject-live-reload": "SparshithNR/ember-cli-inject-live-reload#test-refactor",
+    "ember-cli-sri": "^2.1.1",
+    "ember-cli-template-lint": "^1.0.0-beta.1",
+    "ember-cli-uglify": "^2.1.0",
+    "ember-data": "github:emberjs/data#91127903cf5b46696844665604c0e77e1291abf6",
+    "ember-export-application-global": "^2.0.0",
+    "ember-load-initializers": "^1.1.0",
+    "ember-maybe-import-regenerator": "^0.1.6",
+    "ember-qunit": "^3.4.1",
+    "ember-resolver": "^5.0.1",
+    "ember-service-worker": "file:ember-service-worker.tgz",
+    "ember-source": "https://s3.amazonaws.com/builds.emberjs.com/canary/shas/ebb15e4e16e333567bc162b916f9eabdc595f37f.tgz",
+    "ember-welcome-page": "^3.2.0",
+    "eslint-plugin-ember": "^5.2.0",
+    "loader.js": "^4.7.0",
+    "qunit-dom": "^0.8.0"
+  },
+  "engines": {
+    "node": "6.* || 8.* || >= 10.*"
+  }
+}

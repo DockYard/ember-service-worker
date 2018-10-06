@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "pretest": "cd node-tests/fixtures/simple-app && npm run update-package && npm install ember-service-worker.tgz && npm install",
+    "pretest": "cd node-tests/fixtures/simple-app && npm run update-package && npm install ember-service-worker.tgz && npm install && cd ../mu-app && npm run update-package && npm install ember-service-worker.tgz && npm install",
     "test": "mocha node-tests",
     "fastboottest": "ember fastboot:test"
   },
