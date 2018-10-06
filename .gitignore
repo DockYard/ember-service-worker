@@ -15,6 +15,7 @@
 /libpeerconnection.log
 npm-debug.log*
 yarn-error.log*
+yarn.lock
 testem.log
 /node-tests/fixtures/ember-service-worker.tgz
 /node-tests/fixtures/simple-app/ember-service-worker.tgz
