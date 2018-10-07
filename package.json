@@ -6,6 +6,8 @@
     "pretest": "./scripts/pretest.sh",
     "lint:hbs": "ember-template-lint .",
     "test": "mocha node-tests",
+    "test:builder": "mocha node-tests/service-worker-builder-test.js",
+    "test:acceptance": "mocha node-tests/acceptance-test.js",
     "test:ember": "ember test",
     "test:all": "ember try:each",
     "fastboottest": "ember fastboot:test"
@@ -17,7 +19,7 @@
   "devDependencies": {
     "@ember/optional-features": "^0.7.0",
     "broccoli-test-helpers": "0.0.9",
-    "broccoli-asset-rev": "^2.7.0",
+    "broccoli-asset-rev": "^3.0.0",
     "ember-ajax": "^3.1.0",
     "ember-cli-uglify": "^2.1.0",
     "ember-cli-sri": "^2.1.1",

@@ -41,7 +41,7 @@
     "ember-qunit": "^3.4.1",
     "ember-resolver": "^5.0.1",
     "ember-service-worker": "file:ember-service-worker.tgz",
-    "ember-source": "https://s3.amazonaws.com/builds.emberjs.com/canary/shas/ebb15e4e16e333567bc162b916f9eabdc595f37f.tgz",
+    "ember-source": "https://s3.amazonaws.com/builds.emberjs.com/canary/shas/bef860222ac1ce8b86c9e2ed129e24beb0c07132.tgz",
     "ember-welcome-page": "^3.2.0",
     "eslint-plugin-ember": "^5.2.0",
     "loader.js": "^4.7.0",

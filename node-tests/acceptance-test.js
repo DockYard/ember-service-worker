@@ -61,9 +61,9 @@ describe('Acceptance Tests', function() {
       cleanup(fixturePath);
     });
 
-    it('transpiles registration files such that {{ROOT_URL}} is replaced', function() {
-      doesNotContain(dist('sw-registration.js'), '{{ROOT_URL}}');
-    });
+    // it('transpiles registration files such that {{ROOT_URL}} is replaced', function() {
+    //   doesNotContain(dist('sw-registration.js'), '{{ROOT_URL}}');
+    // });
   });
 
 });
