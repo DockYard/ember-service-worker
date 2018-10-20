@@ -39,6 +39,7 @@ describe('Acceptance Tests', function() {
 
     it('transpiles and concatenates (rollup) all registration files in a plugin into sw-registration.js', function() {
       contains(dist('sw-registration.js'), "self.hello = 'Hello from Ember Service Worker Test';");
+      notContains(dist('sw-registration.js'), "{{ROOT_URL}}");
     });
   });
 });
@@ -64,4 +65,8 @@ function exists(path) {
 
 function contains(path, content) {
   assert.ok(fs.readFileSync(path).toString().indexOf(content) > -1, path + ' contains ' + content);
+}
+
+function notContains(path, content) {
+  assert.ok(fs.readFileSync(path).toString().indexOf(content) === -1, path + ' not contains ' + content);
 }
