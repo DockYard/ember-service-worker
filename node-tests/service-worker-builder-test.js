@@ -123,10 +123,7 @@ describe('Service Worker Builder', () => {
     let plugins = [generatePlugin('test-project', 'builder-test')];
     return build({ app, plugins, minifyJS: { enabled: true } }, 'service-worker')
       .then((results) => {
-        let expected = `
-!function(){"use strict"}();
-//# sourceMappingURL=sw.map
-`.trim();
+        let expected = '\n//# sourceMappingURL=sw.map';
 
         let files = output.read();
         assert.property(files, 'sw.js');
