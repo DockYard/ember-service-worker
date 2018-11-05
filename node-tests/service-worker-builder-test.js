@@ -75,17 +75,17 @@ describe('Service Worker Builder', () => {
   it('transpiles code with babel', () => {
     let plugins = [generatePlugin('test-project', 'builder-test/babel')];
     return build({ app, plugins }, 'service-worker').then(() => {
-      let expected = `
-(function () {
+      let expected = `(function () {
   'use strict';
 
   var CONSTANT = 42;
   self.addEventListener('fetch', function () {
     var x = CONSTANT + 1;
+    return x;
   });
 
 }());
-`.trim();
+`;
       let files = output.read();
       assert.property(files, 'sw.js');
       assert.equal(files['sw.js'], expected);
@@ -100,18 +100,18 @@ describe('Service Worker Builder', () => {
 
     return build({ app, plugins }, 'service-worker')
       .then((results) => {
-        let expected = `
-(function () {
+        let expected = `(function () {
   'use strict';
 
   var CONSTANT = 42;
 
   self.addEventListener('fetch', function () {
     var x = CONSTANT + 1;
+    return x;
   });
 
 }());
-`.trim();
+`;
 
         let files = output.read();
         assert.property(files, 'sw.js');
