@@ -9,22 +9,23 @@
   "scripts": {
     "pretest": "cd node-tests/fixtures/simple-app && npm run update-package && npm install ember-service-worker.tgz && npm install",
     "test": "mocha node-tests",
-    "fastboottest": "ember fastboot:test"
+    "fastboottest": "ember fastboot:test",
+    "lint:js": "eslint ."
   },
   "homepage": "http://ember-service-worker.com",
   "repository": "https://github.com/DockYard/ember-service-worker",
   "engines": {
-    "node": "^ 4.5 || 6.* || >= 7.*"
+    "node": "6.* || 8.* || >= 10.*"
   },
   "author": "Marten Schilstra <mail@martenschilstra.nl>",
   "license": "MIT",
   "devDependencies": {
     "broccoli-test-helper": "^2.0.0",
     "chai": "^4.2.0",
-    "ember-cli": "~2.18.0",
-    "ember-fastboot-addon-tests": "^0.4.0",
+    "ember-cli": "^3.5.0",
+    "ember-fastboot-addon-tests": "^0.5.0",
     "mocha": "^5.2.0",
-    "rimraf": "^2.5.3"
+    "rimraf": "^2.6.2"
   },
   "keywords": [
     "ember-addon",
