@@ -19,11 +19,11 @@
   "author": "Marten Schilstra <mail@martenschilstra.nl>",
   "license": "MIT",
   "devDependencies": {
-    "broccoli-test-helpers": "0.0.9",
-    "chai": "^3.5.0",
+    "broccoli-test-helper": "^2.0.0",
+    "chai": "^4.2.0",
     "ember-cli": "~2.18.0",
     "ember-fastboot-addon-tests": "^0.4.0",
-    "mocha": "^2.5.3",
+    "mocha": "^5.2.0",
     "rimraf": "^2.5.3"
   },
   "keywords": [
@@ -32,10 +32,10 @@
     "service worker"
   ],
   "dependencies": {
+    "broccoli-caching-writer": "^3.0.3",
     "broccoli-file-creator": "^2.1.1",
     "broccoli-funnel": "^2.0.1",
     "broccoli-merge-trees": "1.2.4",
-    "broccoli-caching-writer": "^3.0.3",
     "broccoli-rollup": "0.0.4",
     "broccoli-uglify-sourcemap": "^1.5.1",
     "clone": "^1.0.2",

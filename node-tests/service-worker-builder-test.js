@@ -4,13 +4,12 @@ var ServiceWorkerBuilder = require('../lib/service-worker-builder');
 var assert = require('chai').assert;
 var fs = require('fs');
 var path = require('path');
-var helpers = require('broccoli-test-helpers');
+var helper = require('broccoli-test-helper');
 var Babel = require('broccoli-babel-transpiler');
 var EmberCliBabel = require('ember-cli-babel');
 
-var cleanupBuilders = helpers.cleanupBuilders;
-
 var fixturePath = path.join(__dirname, 'fixtures');
+var createBuilder = helper.createBuilder;
 
 var generatePlugin = function(name, projectPath) {
   return {
@@ -19,23 +18,18 @@ var generatePlugin = function(name, projectPath) {
   };
 };
 
-let readFile = function(results, filePath) {
-  let indexOfFile = results.files.indexOf(filePath);
-  let entry = results.entries[indexOfFile];
-  return fs.readFileSync(path.join(entry.basePath, entry.relativePath));
-};
-
 describe('Service Worker Builder', () => {
   let app;
   let build;
+  let output;
 
   beforeEach(() => {
-    build = helpers.makeTestHelper({
-      subject(options, type) {
-        return new ServiceWorkerBuilder(options).build(type);
-      },
-      fixturePath: fixturePath
-    });
+
+    build = function(options, type) {
+      let subject = new ServiceWorkerBuilder(options).build(type);
+      output = createBuilder(subject);
+      return output.build();
+    };
 
     app = {
       treeGenerator: (dir) => dir,
@@ -60,31 +54,28 @@ describe('Service Worker Builder', () => {
     };
   });
 
-  afterEach(() => helpers.cleanupBuilders());
+  afterEach(() => output.dispose());
 
   it('returns a tree with the sw.js file', () => {
     let plugins = [generatePlugin('test-project', 'builder-test')];
-    return build({ app, plugins }, 'service-worker')
-      .then((results) => {
-        assert.equal(results.files.length, 1);
-        assert.equal(results.files.indexOf('sw.js'), 0);
-      });
+    return build({ app, plugins }, 'service-worker').then(() => {
+      let files = output.read();
+      assert.property(files, 'sw.js');
+    });
   });
 
   it('returns a tree with the sw-registration.js file', () => {
     let plugins = [generatePlugin('test-project', 'builder-test')];
-    return build({ app, plugins }, 'service-worker-registration')
-      .then((results) => {
-        assert.equal(results.files.length, 1);
-        assert.equal(results.files.indexOf('sw-registration.js'), 0);
-      });
+    return build({ app, plugins }, 'service-worker-registration').then(() => {
+      let files = output.read();
+      assert.property(files, 'sw-registration.js');
+    });
   });
 
   it('transpiles code with babel', () => {
     let plugins = [generatePlugin('test-project', 'builder-test/babel')];
-    return build({ app, plugins }, 'service-worker')
-      .then((results) => {
-        let expected = `
+    return build({ app, plugins }, 'service-worker').then(() => {
+      let expected = `
 (function () {
   'use strict';
 
@@ -95,10 +86,10 @@ describe('Service Worker Builder', () => {
 
 }());
 `.trim();
-
-        let file = readFile(results, 'sw.js').toString('utf8');
-        assert.equal(file, expected);
-      });
+      let files = output.read();
+      assert.property(files, 'sw.js');
+      assert.equal(files['sw.js'], expected);
+    });
   });
 
   it('uses rollup to concat all modules in a file', () => {
@@ -122,8 +113,9 @@ describe('Service Worker Builder', () => {
 }());
 `.trim();
 
-        let file = readFile(results, 'sw.js').toString('utf8');
-        assert.equal(file, expected);
+        let files = output.read();
+        assert.property(files, 'sw.js');
+        assert.equal(files['sw.js'], expected);
       });
   });
 
@@ -136,7 +128,9 @@ describe('Service Worker Builder', () => {
 //# sourceMappingURL=sw.map
 `.trim();
 
-        assert.equal(readFile(results, 'sw.js'), expected);
+        let files = output.read();
+        assert.property(files, 'sw.js');
+        assert.equal(files['sw.js'], expected);
       });
   });
 });
