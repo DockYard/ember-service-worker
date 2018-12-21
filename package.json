@@ -50,7 +50,7 @@
   "ember-addon": {
     "configPath": "tests/dummy/config",
     "versionCompatibility": {
-      "ember": ">1.13.0 <3.0.0"
+      "ember": ">2.13.0 <3.0.0"
     },
     "before": [
       "broccoli-asset-rev",
