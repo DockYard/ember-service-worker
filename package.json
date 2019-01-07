@@ -25,7 +25,10 @@
     "ember-cli": "^3.5.0",
     "ember-fastboot-addon-tests": "^0.5.0",
     "mocha": "^5.2.0",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-includepaths": "^0.2.3",
+    "rollup-plugin-node-resolve": "^4.0.0"
   },
   "keywords": [
     "ember-addon",
@@ -50,7 +53,7 @@
   "ember-addon": {
     "configPath": "tests/dummy/config",
     "versionCompatibility": {
-      "ember": ">2.13.0 <3.0.0"
+      "ember": ">2.13.0 <3.6.0"
     },
     "before": [
       "broccoli-asset-rev",
