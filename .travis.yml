@@ -1,14 +1,15 @@
 ---
 language: node_js
 node_js:
-  - "4"
   - "6"
+  - "8"
   - "stable"
 
 sudo: false
 
 cache:
   directories:
+    - $HOME/.npm
     - node_modules
     - node-tests/fixtures/simple-app/node_modules
 
@@ -18,17 +19,11 @@ env:
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - env: EMBER_TRY_SCENARIO=ember-canary
 
 before_install:
-  - if [[ $(npm -v | cut -d '.' -f 1) -lt 3 ]]; then npm i -g npm@^3; fi
   - npm config set spin false
-  - npm install -g bower
-
-install:
-  - cd node-tests/fixtures/simple-app && npm install && bower install && cd -
-  - npm install
+  - npm install -g npm@4
+  - npm --version
 
 script:
   - npm run $TEST_SCENARIO

@@ -1,6 +1,7 @@
 'use strict';
 
 const ServiceWorkerBuilder = require('./lib/service-worker-builder');
+const InlineRegistration = require('./lib/inline-registration');
 const mergeTrees = require('broccoli-merge-trees');
 const writeFile = require('broccoli-file-creator');
 const hashForDep = require('hash-for-dep');
@@ -67,20 +68,26 @@ module.exports = {
       app: this,
       appTree,
       minifyJS: this.app.options.minifyJS,
+      fingerprint: this.app.options.fingerprint.enabled,
       plugins,
       rootURL: this._getRootURL(),
       sourcemaps: this.app.options.sourcemaps,
       serviceWorkerFileName: this._getServiceWorkerFileName(),
+      registrationDistPath: options.registrationDistPath
     });
 
     let serviceWorkerTree = serviceWorkerBuilder.build('service-worker');
     let serviceWorkerRegistrationTree =
       serviceWorkerBuilder.build('service-worker-registration');
 
+    if (options.registrationStrategy === 'inline') {
+      serviceWorkerRegistrationTree = new InlineRegistration([appTree, serviceWorkerRegistrationTree], options);
+    }
+
     return mergeTrees([
+      appTree,
       serviceWorkerTree,
-      serviceWorkerRegistrationTree,
-      appTree
+      serviceWorkerRegistrationTree
     ], { overwrite: true });
   },
 
@@ -91,19 +98,37 @@ module.exports = {
       return;
     }
 
-    if (type === 'body-footer' && options.registrationStrategy === 'default') {
-      return `<script src="${this._getRootURL()}sw-registration.js"></script>`;
+    let registrationDistPath = options.registrationDistPath;
+    let srcPath = 'sw-registration.js';
+
+    if (registrationDistPath) {
+      srcPath = `${registrationDistPath}/${srcPath}`;
+    }
+
+    if (type === 'body-footer') {
+      if (options.registrationStrategy === 'default') {
+        return `<script src="${this._getRootURL()}${srcPath}"></script>`;
+      }
+
+      if (options.registrationStrategy === 'inline') {
+        return `<!-- ESW_INLINE_PLACEHOLDER -->`;
+      }
     }
 
     if (type === 'head-footer' && options.registrationStrategy === 'async') {
-      return `<script async src="${this._getRootURL()}sw-registration.js"></script>`;
+      return `<script async src="${this._getRootURL()}${srcPath}"></script>`;
     }
   },
 
   treeForServiceWorker(swTree, appTree) {
     var options = this._getOptions();
     options.projectVersion = this.project.pkg.version;
-    options.projectRevision = hashForDep(this.project.root);
+
+    try {
+      options.projectRevision = hashForDep(this.project.root);
+    } catch (e) {
+      options.projectRevision = '0';
+    }
 
     var indexFile = new IndexFile([appTree], options);
 

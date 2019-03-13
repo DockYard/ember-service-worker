@@ -10,20 +10,22 @@
   },
   "repository": "",
   "scripts": {
+    "preinstall": "npm run update-package",
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test"
+    "test": "ember test",
+    "update-package": "mv $(npm pack ../../..) ember-service-worker.tgz"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
     "ember-ajax": "^2.4.1",
     "ember-cli": "2.12.0",
     "ember-cli-app-version": "^2.0.0",
-    "ember-cli-babel": "^5.1.7",
+    "ember-cli-babel": "^6.9.0",
     "ember-cli-dependency-checker": "^1.3.0",
     "ember-cli-eslint": "^3.0.0",
     "ember-cli-htmlbars": "^1.1.1",
-    "ember-cli-htmlbars-inline-precompile": "^0.3.6",
+    "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.1",
     "ember-cli-qunit": "^3.1.0",
     "ember-cli-shims": "^1.0.2",
@@ -33,7 +35,7 @@
     "ember-export-application-global": "^1.0.5",
     "ember-load-initializers": "^0.6.0",
     "ember-resolver": "^2.0.3",
-    "ember-service-worker": "file:../../..",
+    "ember-service-worker": "file:ember-service-worker.tgz",
     "ember-source": "~2.12.0",
     "ember-welcome-page": "^2.0.2",
     "loader.js": "^4.2.3"

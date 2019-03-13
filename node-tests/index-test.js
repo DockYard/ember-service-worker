@@ -5,36 +5,6 @@
 
 var addonIndex = require('../index');
 var assert = require('chai').assert;
-var fs = require('fs');
-var path = require('path');
-var helpers = require('broccoli-test-helpers');
-var cleanupBuilders = helpers.cleanupBuilders;
-
-var fixturePath = path.join(__dirname, 'fixtures');
-
-var makeTestHelper = function(functionName) {
-  return helpers.makeTestHelper({
-    subject: function() {
-      return addonIndex[functionName].apply(addonIndex, arguments);
-    },
-    fixturePath: fixturePath
-  });
-};
-
-var transpilePath = makeTestHelper('_transpilePath');
-var serviceWorkerTreeFor = makeTestHelper('_serviceWorkerTreeFor');
-var serviceWorkerRegistrationTreeFor = makeTestHelper('_serviceWorkerRegistrationTreeFor');
-
-var pathFromEntry = function(entry) {
-  return path.join(entry.basePath, entry.relativePath);
-};
-
-var generateProject = function(name, projectPath) {
-  return {
-    pkg: { name: name },
-    root: path.join(fixturePath, projectPath),
-  };
-};
 
 describe('Index', function() {
 
@@ -42,10 +12,6 @@ describe('Index', function() {
     addonIndex.treeGenerator = function(dir) {
       return dir;
     };
-  });
-
-  afterEach(function() {
-    cleanupBuilders();
   });
 
   describe('#_findPluginsFor', function() {
