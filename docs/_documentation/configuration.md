@@ -9,6 +9,8 @@ sections:
     title: Registration
   - anchor: disabling-the-service-worker
     title: Disabling the Service Worker
+  - anchor: customizing-the-sw.js-filename
+    title: Customizing the sw.js Filename
 ---
 
 ### Versioning
@@ -102,4 +104,24 @@ To disable the Service Worker on the command line:
 
 ```sh
 SW_DISABLED=true ember serve
+```
+
+### Customizing the sw.js Filename
+
+The common filename for the file that contains all of the service worker code is `sw.js`. If you require a different filename to be generated, you can specify this in the configuration.
+
+To change the filename used from the `sw.js` default, update your `ember-cli-build.js` file:
+
+```js
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    'ember-service-worker': {
+      serviceWorkerFileName: 'customfilename.js'
+    }
+  });
+
+  return app.toTree();
+};
 ```

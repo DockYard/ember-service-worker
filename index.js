@@ -19,11 +19,13 @@ module.exports = {
     // Configures Ember CLI's build system to not add a fingerprint to sw.js
     this.app = app;
     this.app.options = this.app.options || {};
+    let options = this.app.options['ember-service-worker'] =  this.app.options['ember-service-worker'] || {}
+    options.serviceWorkerFilename = options.serviceWorkerFilename || 'sw.js';
+
     this.app.options.fingerprint = this.app.options.fingerprint || {};
     this.app.options.fingerprint.exclude = this.app.options.fingerprint.exclude || [];
-    this.app.options.fingerprint.exclude.push('sw.js');
+    this.app.options.fingerprint.exclude.push(options.serviceWorkerFilename);
 
-    let options = this.app.options['ember-service-worker'] =  this.app.options['ember-service-worker'] || {}
     options.registrationStrategy = options.registrationStrategy || 'default';
 
     if (options.enabled === undefined) {
@@ -72,7 +74,8 @@ module.exports = {
       plugins,
       rootURL: this._getRootURL(),
       sourcemaps: this.app.options.sourcemaps,
-      registrationDistPath: options.registrationDistPath
+      registrationDistPath: options.registrationDistPath,
+      serviceWorkerFilename: options.serviceWorkerFilename
     });
 
     let serviceWorkerTree = serviceWorkerBuilder.build('service-worker');
