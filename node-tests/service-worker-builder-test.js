@@ -10,6 +10,7 @@ var EmberCliBabel = require('ember-cli-babel');
 
 var fixturePath = path.join(__dirname, 'fixtures');
 var createBuilder = helper.createBuilder;
+var serviceWorkerFilename = 'sw.js';
 
 var generatePlugin = function(name, projectPath) {
   return {
@@ -58,9 +59,17 @@ describe('Service Worker Builder', () => {
 
   it('returns a tree with the sw.js file', () => {
     let plugins = [generatePlugin('test-project', 'builder-test')];
-    return build({ app, plugins }, 'service-worker').then(() => {
+    return build({ app, plugins, serviceWorkerFilename }, 'service-worker').then(() => {
       let files = output.read();
-      assert.property(files, 'sw.js');
+      assert.property(files, serviceWorkerFilename);
+    });
+  });
+
+  it('returns a tree with a custom service worker file', () => {
+    let plugins = [generatePlugin('test-project', 'builder-test')];
+    return build({ app, plugins, serviceWorkerFilename: 'kermit.js' }, 'service-worker').then(() => {
+      let files = output.read();
+      assert.property(files, 'kermit.js');
     });
   });
 
@@ -74,7 +83,7 @@ describe('Service Worker Builder', () => {
 
   it('transpiles code with babel', () => {
     let plugins = [generatePlugin('test-project', 'builder-test/babel')];
-    return build({ app, plugins }, 'service-worker').then(() => {
+    return build({ app, plugins, serviceWorkerFilename }, 'service-worker').then(() => {
       let expected = `(function () {
   'use strict';
 
@@ -87,8 +96,8 @@ describe('Service Worker Builder', () => {
 }());
 `;
       let files = output.read();
-      assert.property(files, 'sw.js');
-      assert.equal(files['sw.js'], expected);
+      assert.property(files, serviceWorkerFilename);
+      assert.equal(files[serviceWorkerFilename], expected);
     });
   });
 
@@ -98,7 +107,7 @@ describe('Service Worker Builder', () => {
       generatePlugin('plugin-b', 'builder-test/rollup/plugin-b')
     ];
 
-    return build({ app, plugins }, 'service-worker')
+    return build({ app, plugins, serviceWorkerFilename }, 'service-worker')
       .then((results) => {
         let expected = `(function () {
   'use strict';
@@ -114,20 +123,20 @@ describe('Service Worker Builder', () => {
 `;
 
         let files = output.read();
-        assert.property(files, 'sw.js');
-        assert.equal(files['sw.js'], expected);
+        assert.property(files, serviceWorkerFilename);
+        assert.equal(files[serviceWorkerFilename], expected);
       });
   });
 
   it('uglifies the code when `minifyJS` is enabled', () => {
     let plugins = [generatePlugin('test-project', 'builder-test')];
-    return build({ app, plugins, minifyJS: { enabled: true } }, 'service-worker')
+    return build({ app, plugins, serviceWorkerFilename, minifyJS: { enabled: true } }, 'service-worker')
       .then((results) => {
         let expected = '\n//# sourceMappingURL=sw.map';
 
         let files = output.read();
-        assert.property(files, 'sw.js');
-        assert.equal(files['sw.js'], expected);
+        assert.property(files, serviceWorkerFilename);
+        assert.equal(files[serviceWorkerFilename], expected);
       });
   });
 });

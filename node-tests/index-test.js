@@ -29,4 +29,24 @@ describe('Index', function() {
       assert.equal(addons[0].name, 'two', 'The addon named "two" should be found');
     });
   });
+
+  describe('#included', () => {
+    it('sets default options', () => {
+      const scope = { _super: {} };
+      addonIndex.included.call(scope, { env: 'prod' });
+
+      let expected = {
+        'ember-service-worker': {
+          serviceWorkerFilename: 'sw.js',
+          enabled: true,
+          registrationStrategy: 'default'
+        },
+        'fingerprint': {
+          exclude: ['sw.js']
+        }
+      };
+
+      assert.deepEqual(scope.app.options, expected);
+    });
+  });
 });
