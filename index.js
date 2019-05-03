@@ -72,7 +72,7 @@ module.exports = {
       minifyJS: this.app.options.minifyJS,
       fingerprint: this.app.options.fingerprint.enabled,
       plugins,
-      rootURL: this._getRootURL(),
+      serviceWorkerRootURL: this._getRootURL(false),
       sourcemaps: this.app.options.sourcemaps,
       registrationDistPath: options.registrationDistPath,
       serviceWorkerFilename: options.serviceWorkerFilename
@@ -137,7 +137,10 @@ module.exports = {
     return mergeTrees([swTree, indexFile]);
   },
 
-  _getRootURL() {
+  _getRootURL(useAssetUrl = true) {
+    if (useAssetUrl && this.app.env === 'prod' && this.app.options.fingerprint.enabled === true && !!this.app.options.fingerprint.prepend) {
+      return this.app.options.fingerprint.prepend;
+    }
     if (this._projectRootURL) {
       return this._projectRootURL;
     }
