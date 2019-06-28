@@ -4,7 +4,7 @@ const request = denodeify(require('request'));
 const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
 
 const testEmberVersions = ['beta', 'latest', '3.11', '3.8', '3.4', '2.18'];
-/*
+
 testEmberVersions.forEach(version => {
   describe(`basic registration in Ember version "${version}"`, function() {
     this.timeout(10000000);
@@ -66,4 +66,3 @@ testEmberVersions.forEach(version => {
     });
   });
 });
-*/
