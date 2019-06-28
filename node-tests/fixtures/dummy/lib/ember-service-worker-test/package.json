@@ -5,6 +5,6 @@
     "ember-service-worker-plugin"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.1.7"
+    "ember-cli-babel": "^6.16.0"
   }
 }
