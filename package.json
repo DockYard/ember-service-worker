@@ -13,7 +13,7 @@
   "homepage": "http://ember-service-worker.com",
   "repository": "https://github.com/DockYard/ember-service-worker",
   "engines": {
-    "node": "6.* || 8.* || >= 10.*"
+    "node": "8.* || >= 10.*"
   },
   "author": "Marten Schilstra <mail@martenschilstra.nl>",
   "license": "MIT",
