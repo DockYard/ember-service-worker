@@ -13,17 +13,10 @@ cache:
     - node_modules
     - node-tests/fixtures/simple-app/node_modules
 
-env:
-  - TEST_SCENARIO=test
-  - TEST_SCENARIO=fastboottest
-
-matrix:
-  fast_finish: true
-
 before_install:
   - npm config set spin false
   - npm install -g npm@4
   - npm --version
 
 script:
-  - npm run $TEST_SCENARIO
+  - npm run test

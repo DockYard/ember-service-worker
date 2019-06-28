@@ -8,7 +8,6 @@
   },
   "scripts": {
     "test": "mocha node-tests",
-    "test:fastboot": "ember fastboot:test",
     "lint:js": "eslint ."
   },
   "homepage": "http://ember-service-worker.com",
@@ -21,17 +20,11 @@
   "devDependencies": {
     "broccoli-test-helper": "^2.0.0",
     "chai": "^4.2.0",
+    "denodeify": "^1.2.1",
     "ember-cli": "^3.5.0",
     "ember-cli-addon-tests": "^0.11.1",
-    "ember-cli-htmlbars": "^3.0.1",
-    "ember-cli-htmlbars-inline-precompile": "^2.1.0",
-    "ember-load-initializers": "^2.0.0",
-    "ember-resolver": "^5.0.1",
-    "ember-source": "^3.5.0",
-    "fixturify": "^1.2.0",
-    "fs-extra": "^8.0.1",
-    "loader.js": "^4.7.0",
     "mocha": "^5.2.0",
+    "request": "^2.88.0",
     "rimraf": "^2.6.2"
   },
   "keywords": [
