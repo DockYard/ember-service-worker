@@ -1,67 +1,68 @@
-var assert = require('chai').assert;
-var fs = require('fs');
-var path = require('path');
-var rimraf = require('rimraf').sync;
-var spawnSync = require('child_process').spawnSync;
+const expect = require('chai').expect;
+const denodeify = require('denodeify');
+const request = denodeify(require('request'));
+const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
 
-var emberCLIPath = path.resolve(__dirname, './fixtures/simple-app/node_modules/ember-cli/bin/ember');
+const testEmberVersions = ['beta', 'latest', '3.11', '3.8', '3.4', '2.18'];
 
-describe('Acceptance Tests', function() {
-  this.timeout(120000);
-
-  context('A Simple App', function() {
-    var fixturePath = path.resolve(__dirname, './fixtures/simple-app');
-
-    function dist(file) {
-      return path.join(fixturePath, 'dist', file);
-    }
+testEmberVersions.forEach(version => {
+  describe(`basic registration in Ember version "${version}"`, function() {
+    this.timeout(10000000);
+    let app;
 
     before(function() {
-      runEmberCommand(fixturePath, ['build']);
+      app = new AddonTestApp();
+
+      return app.create('dummy', {
+        emberVersion: version,
+        fixturesPath: 'node-tests/fixtures'
+      })
+        .then(() => {
+          app.editPackageJSON(pkg => {
+            pkg['ember-addon'] = pkg['ember-addon'] || {};
+            pkg['ember-addon'].paths = pkg['ember-addon'].paths || [];
+            pkg['ember-addon'].paths.push('lib/ember-service-worker-test');
+          });
+          return app.startServer({
+            detectServerStart(output) {
+              return output.indexOf('Serving on ') > -1;
+            }
+          });
+        });
     });
 
     after(function() {
-      cleanup(fixturePath);
+      return app.stopServer();
     });
 
-    it('produces a sw.js file', function() {
-      exists(dist('sw.js'));
+    it('includes registration in script tag by default', () => {
+      return request({
+        url: 'http://localhost:49741',
+        headers: {
+          'Accept': 'text/html'
+        }
+      }).then(response => {
+        expect(response.statusCode).to.equal(200);
+        expect(response.body).to.contain('<script src="/sw-registration.js"');
+      });
     });
 
-    it('produces a sw-registration file, which is loaded in index.html', function() {
-      exists(dist('sw-registration.js'));
-      contains(dist('index.html'), '<script src="/sw-registration.js"></script>');
+    it('produces a sw-registration.js file', () => {
+      return request({
+        url: 'http://localhost:49741/sw-registration.js'
+      }).then(response => {
+        expect(response.statusCode).to.equal(200);
+        expect(response.body).to.contain('self.hello');
+      });
     });
 
-    it('transpiles and concatenates (rollup) all files in a plugin into sw.js', function() {
-      contains(dist('sw.js'), "self.hello = 'Hello from Ember Service Worker Test';");
-    });
-
-    it('transpiles and concatenates (rollup) all registration files in a plugin into sw-registration.js', function() {
-      contains(dist('sw-registration.js'), "self.hello = 'Hello from Ember Service Worker Test';");
+    it('produces a sw.js file', () => {
+      return request({
+        url: 'http://localhost:49741/sw.js'
+      }).then(response => {
+        expect(response.statusCode).to.equal(200);
+        expect(response.body).to.contain('self.hello');
+      });
     });
   });
 });
-
-function runEmberCommand(packagePath, command) {
-  var result = spawnSync(emberCLIPath, command, {
-    cwd: packagePath
-  });
-
-  if (result.status !== 0) {
-    throw new Error(result.stderr.toString());
-  }
-}
-
-function cleanup(packagePath) {
-  rimraf(path.join(packagePath, 'dist'));
-  rimraf(path.join(packagePath, 'tmp'));
-}
-
-function exists(path) {
-  assert.ok(fs.existsSync(path), path + ' exists');
-}
-
-function contains(path, content) {
-  assert.ok(fs.readFileSync(path).toString().indexOf(content) > -1, path + ' contains ' + content);
-}
