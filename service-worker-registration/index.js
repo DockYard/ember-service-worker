@@ -2,9 +2,11 @@ export const PROJECT_REVISION = '{{PROJECT_REVISION}}';
 
 let SUCCESS_HANDLERS = [];
 let ERROR_HANDLERS = [];
+const SCOPE = '{{SERVICE_WORKER_SCOPE}}';
+const ROOT_URL = '{{ROOT_URL}}';
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('{{ROOT_URL}}{{SERVICE_WORKER_FILENAME}}', { scope: '{{ROOT_URL}}' })
+  navigator.serviceWorker.register('{{ROOT_URL}}{{SERVICE_WORKER_FILENAME}}', { scope: SCOPE || ROOT_URL })
     .then(function(reg) {
       let current = Promise.resolve();
 
