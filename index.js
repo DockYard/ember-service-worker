@@ -75,7 +75,8 @@ module.exports = {
       rootURL: this._getRootURL(),
       sourcemaps: this.app.options.sourcemaps,
       registrationDistPath: options.registrationDistPath,
-      serviceWorkerFilename: options.serviceWorkerFilename
+      serviceWorkerFilename: options.serviceWorkerFilename,
+      serviceWorkerScope: options.serviceWorkerScope
     });
 
     let serviceWorkerTree = serviceWorkerBuilder.build('service-worker');
