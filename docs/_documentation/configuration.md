@@ -118,7 +118,7 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     'ember-service-worker': {
-      serviceWorkerFileName: 'customfilename.js'
+      serviceWorkerFilename: 'customfilename.js'
     }
   });
 
