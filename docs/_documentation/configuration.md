@@ -77,6 +77,27 @@ In addition to `inline` strategy there is also the `async` option. This will add
 the async property to the injected script tag, which will make the loading
 behavior of the registration script async.
 
+By default the ServiceWorker is registered on the same scope as the Ember
+application's `rootURL`. If you need to set a scope that is not the same as the
+`rootURL`, you an use the `serviceWorkerScope` config option to override the
+default.
+
+```js
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    'ember-service-worker': {
+      serviceWorkerScope: '/v2/api/'
+    }
+  });
+
+  return app.toTree();
+};
+```
+
+You can read more about ServiceWorker scope on [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers#Enter_service_workers).
+
 ### Disabling the Service Worker
 
 If you like to run or build your app without the Service Worker functionality
