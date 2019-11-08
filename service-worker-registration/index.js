@@ -4,9 +4,12 @@ let SUCCESS_HANDLERS = [];
 let ERROR_HANDLERS = [];
 const SCOPE = '{{SERVICE_WORKER_SCOPE}}';
 const ROOT_URL = '{{ROOT_URL}}';
+// when the option isn't defined, SCOPE becomes 'undefined' after the rollup replace occurs
+let scopePassed = SCOPE !== 'undefined';
+let scope = scopePassed ? SCOPE : ROOT_URL;
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('{{ROOT_URL}}{{SERVICE_WORKER_FILENAME}}', { scope: SCOPE || ROOT_URL })
+  navigator.serviceWorker.register('{{ROOT_URL}}{{SERVICE_WORKER_FILENAME}}', { scope })
     .then(function(reg) {
       let current = Promise.resolve();
 
