@@ -3,11 +3,11 @@ const denodeify = require('denodeify');
 const request = denodeify(require('request'));
 const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
 
-const testEmberVersions = ['beta', 'latest', '3.11', '3.8', '3.4', '2.18'];
+const testEmberVersions = ['beta', 'latest', '3.12', '3.8', '3.4', '2.18'];
 
 testEmberVersions.forEach(version => {
   describe(`basic registration in Ember version "${version}"`, function() {
-    this.timeout(10000000);
+    this.timeout(200000);
     let app;
 
     before(function() {
@@ -15,7 +15,8 @@ testEmberVersions.forEach(version => {
 
       return app.create('dummy', {
         emberVersion: version,
-        fixturesPath: 'node-tests/fixtures'
+        fixturesPath: 'node-tests/fixtures',
+        skipNpm: true
       })
         .then(() => {
           app.editPackageJSON(pkg => {
@@ -23,6 +24,8 @@ testEmberVersions.forEach(version => {
             pkg['ember-addon'].paths = pkg['ember-addon'].paths || [];
             pkg['ember-addon'].paths.push('lib/ember-service-worker-test');
           });
+          return app.run('npm', 'install');
+        }).then(() => {
           return app.startServer({
             detectServerStart(output) {
               return output.indexOf('Serving on ') > -1;
