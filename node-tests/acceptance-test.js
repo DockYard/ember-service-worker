@@ -7,7 +7,7 @@ const testEmberVersions = ['beta', 'latest', '3.12', '3.8', '3.4', '2.18'];
 
 testEmberVersions.forEach(version => {
   describe(`basic registration in Ember version "${version}"`, function() {
-    this.timeout(200000);
+    this.timeout(10000000);
     let app;
 
     before(function() {

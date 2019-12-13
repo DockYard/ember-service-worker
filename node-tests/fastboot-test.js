@@ -4,7 +4,7 @@ const request = denodeify(require('request'));
 const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
 
 describe('Fastboot compatibility', function() {
-  this.timeout(200000);
+  this.timeout(10000000);
   let app;
 
   before(function() {
