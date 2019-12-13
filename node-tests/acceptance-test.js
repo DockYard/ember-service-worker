@@ -2,6 +2,8 @@ const expect = require('chai').expect;
 const denodeify = require('denodeify');
 const request = denodeify(require('request'));
 const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
+const path = require('path');
+const fs = require('fs-extra');
 
 const testEmberVersions = ['beta', 'latest', '3.12', '3.8', '3.4', '2.18'];
 
@@ -18,20 +20,25 @@ testEmberVersions.forEach(version => {
         fixturesPath: 'node-tests/fixtures',
         skipNpm: true
       })
-        .then(() => {
-          app.editPackageJSON(pkg => {
-            pkg['ember-addon'] = pkg['ember-addon'] || {};
-            pkg['ember-addon'].paths = pkg['ember-addon'].paths || [];
-            pkg['ember-addon'].paths.push('lib/ember-service-worker-test');
-          });
-          return app.run('npm', 'install');
-        }).then(() => {
-          return app.startServer({
-            detectServerStart(output) {
-              return output.indexOf('Serving on ') > -1;
-            }
-          });
+      .then(() => {
+        app.editPackageJSON(pkg => {
+          pkg['ember-addon'] = pkg['ember-addon'] || {};
+          pkg['ember-addon'].paths = pkg['ember-addon'].paths || [];
+          pkg['ember-addon'].paths.push('lib/ember-service-worker-test');
         });
+        return app.run('npm', 'install');
+      }).then(() => {
+        // https://github.com/tomdale/ember-cli-addon-tests/issues/176
+        let addonPath = path.join(app.path, 'node_modules', 'ember-service-worker');
+        fs.removeSync(addonPath);
+        fs.ensureSymlinkSync(process.cwd(), addonPath);
+      }).then(() => {
+        return app.startServer({
+          detectServerStart(output) {
+            return output.indexOf('Serving on ') > -1;
+          }
+        });
+      });
     });
 
     after(function() {
