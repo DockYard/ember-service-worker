@@ -79,3 +79,11 @@ To run the ember tests:
 ```sh
 ember test
 ```
+
+## Running the docs
+The docs site uses the Jekyll site library and requires Ruby to run locally.
+From the `docs` directory, enter the following to run locally
+
+```sh
+bundle exec jekyll serve
+```
