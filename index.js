@@ -73,6 +73,7 @@ module.exports = {
       fingerprint: this.app.options.fingerprint.enabled,
       plugins,
       rootURL: this._getRootURL(),
+      serviceWorkerPathPrepend: options.serviceWorkerPathPrepend,
       sourcemaps: this.app.options.sourcemaps,
       registrationDistPath: options.registrationDistPath,
       serviceWorkerFilename: options.serviceWorkerFilename
