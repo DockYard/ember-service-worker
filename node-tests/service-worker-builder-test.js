@@ -137,12 +137,12 @@ describe('Service Worker Builder', () => {
   'use strict';
 
   var SCOPE = '/other-scope/';
-  var ROOT_URL = '/';
-  var scopePassed = SCOPE !== 'undefined';
-  var scope = scopePassed ? SCOPE : ROOT_URL;
+  var scope =  SCOPE ;
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js', { scope: scope });
+    navigator.serviceWorker.register('/sw.js', {
+      scope: scope
+    });
   }
 
 }());
