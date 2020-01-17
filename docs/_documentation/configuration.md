@@ -125,3 +125,21 @@ module.exports = function(defaults) {
   return app.toTree();
 };
 ```
+
+### Customizing the root directory for generated fiels
+
+By default, all service worker files will be generated in with the same directory as the base Ember application. You can customize this by specifying a unique `rootURL` for your service worker files. In production builds any fingerprint `prepend` values will be used in place of the `rootURL` for registration assets. This ensures that CDN configured assets remain together. The service worker file itself, however, must be served from the same domain as your application and follows the `rootURL` configured at all times.
+
+```js
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    'ember-service-worker': {
+      rootURL: '/my-custom-sw-root/'
+    }
+  });
+
+  return app.toTree();
+};
+```
