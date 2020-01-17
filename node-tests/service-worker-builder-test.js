@@ -127,6 +127,29 @@ describe('Service Worker Builder', () => {
         assert.equal(files[serviceWorkerFilename], expected);
       });
   });
+  it('overides root url when using serviceWorkerScope', () => {
+    let plugins = [
+      generatePlugin('ember-service-worker', 'builder-test/rollup/scope-override/ember-service-worker'),
+    ];
+    return build({ app, plugins, rootURL: '/', serviceWorkerFilename, serviceWorkerScope: '/other-scope/' }, 'service-worker-registration').then(() => {
+      let files = output.read();
+      let expected = `(function () {
+  'use strict';
+
+  var SCOPE = '/other-scope/';
+  var scope =  SCOPE ;
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', {
+      scope: scope
+    });
+  }
+
+}());
+`;
+      assert.equal(files['sw-registration.js'], expected);
+    });
+  });
 
   it('uglifies the code when `minifyJS` is enabled', () => {
     let plugins = [generatePlugin('test-project', 'builder-test')];
