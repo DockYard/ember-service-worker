@@ -46,7 +46,7 @@ module.exports = {
       (function() {
         if (typeof FastBoot === 'undefined') {
           var script = document.createElement('script')
-          script.src = '${this._getRootURL()}sw-registration.js';
+          script.src = '${this._getAssetRootURL()}sw-registration.js';
           document.body.appendChild(script);
         }
       })();
@@ -72,7 +72,7 @@ module.exports = {
       minifyJS: this.app.options.minifyJS,
       fingerprint: this.app.options.fingerprint.enabled,
       plugins,
-      serviceWorkerRootURL: this._getRootURL(false),
+      rootURL: this._getBaseRootURL(),
       sourcemaps: this.app.options.sourcemaps,
       registrationDistPath: options.registrationDistPath,
       serviceWorkerFilename: options.serviceWorkerFilename
@@ -109,7 +109,7 @@ module.exports = {
 
     if (type === 'body-footer') {
       if (options.registrationStrategy === 'default') {
-        return `<script src="${this._getRootURL()}${srcPath}"></script>`;
+        return `<script src="${this._getAssetRootURL()}${srcPath}"></script>`;
       }
 
       if (options.registrationStrategy === 'inline') {
@@ -118,7 +118,7 @@ module.exports = {
     }
 
     if (type === 'head-footer' && options.registrationStrategy === 'async') {
-      return `<script async src="${this._getRootURL()}${srcPath}"></script>`;
+      return `<script async src="${this._getAssetRootURL()}${srcPath}"></script>`;
     }
   },
 
@@ -137,10 +137,30 @@ module.exports = {
     return mergeTrees([swTree, indexFile]);
   },
 
-  _getRootURL(useAssetUrl = true) {
-    if (useAssetUrl && this.app.env === 'prod' && this.app.options.fingerprint.enabled === true && !!this.app.options.fingerprint.prepend) {
-      return this.app.options.fingerprint.prepend;
+  /**
+   * The root url takes into account any user-configured root as well as any fingerprint prepending.
+   * Fingerprint should be used in production when it is enabled and a prepend defined.
+   * Otherwise any override root url should be used followed by the application base url.
+   *
+   * Fingerprinting should only be taken into account for files that are considered application assets.
+   * This includes the registration file but does NOT include the primary service worker file.
+   */
+  _getAssetRootURL() {
+    if (this._projectAssetRootURL) {
+      return this._projectAssetRootURL;
     }
+    if (useAssetUrl && this.app.env === 'prod' && this.app.options.fingerprint.enabled === true && !!this.app.options.fingerprint.prepend) {
+      this._projectAssetRootURL = this.app.options.fingerprint.prepend;
+    } else {
+      this._projectAssetRootURL = this._getBaseRootURL()
+    }
+    return this._projectAssetRootURL;
+  },
+
+  /**
+   * Determines the base root url for the service worker files. This does not take fingerprinting into account.
+   */
+  _getBaseRootURL() {
     if (this._projectRootURL) {
       return this._projectRootURL;
     }
