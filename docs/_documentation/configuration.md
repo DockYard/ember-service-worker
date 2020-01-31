@@ -80,7 +80,7 @@ behavior of the registration script asynchronous.
 By default the ServiceWorker is registered on the same scope as the Ember
 application's `rootURL`. If you need to set a scope that is not the same as the
 `rootURL`, you an use the `serviceWorkerScope` config option to override the
-default.
+default. The scope of a service worker cannot be broader than its location so only use this option to narrow the scope.
 
 ```js
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
