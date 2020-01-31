@@ -136,12 +136,9 @@ describe('Service Worker Builder', () => {
       let expected = `(function () {
   'use strict';
 
-  var SCOPE = '/other-scope/';
-  var scope =  SCOPE ;
-
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js', {
-      scope: scope
+      scope: '/other-scope/'
     });
   }
 
