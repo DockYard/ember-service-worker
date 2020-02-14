@@ -44,7 +44,7 @@
     "ember-cli-babel": "^7.13.2",
     "glob": "^7.1.6",
     "hash-for-dep": "^1.5.1",
-    "@rollup/plugin-replace": "^2.2.1"
+    "@rollup/plugin-replace": "2.3.0"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config",
