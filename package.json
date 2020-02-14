@@ -23,7 +23,12 @@
     "denodeify": "^1.2.1",
     "ember-cli": "^3.14.0",
     "ember-cli-addon-tests": "^0.11.1",
+    "ember-cli-htmlbars": "^4.2.2",
+    "ember-load-initializers": "^2.1.1",
+    "ember-resolver": "^7.0.0",
+    "ember-source": "~3.16.0",
     "fs-extra": "^8.1.0",
+    "loader.js": "^4.7.0",
     "mocha": "^6.2.2",
     "request": "^2.88.0",
     "rimraf": "^3.0.0"
