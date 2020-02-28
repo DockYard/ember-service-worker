@@ -13,7 +13,7 @@ sections:
 
 ### Installation
 
-To get started with Ember Service Worker, install the addon in your exisiting
+To get started with Ember Service Worker, install the addon in your existing
 Ember.js project:
 
 {% highlight shell %}
@@ -26,7 +26,7 @@ when the page loads.
 ### Offline first
 
 Let's now add some plugins to make the app offline first. This is done by
-installing some aditional addons:
+installing some additional addons:
 
 {% highlight shell %}
 ember install ember-service-worker-index
