@@ -8,7 +8,7 @@ const fs = require('fs-extra');
 const testEmberVersions = ['latest']; // ['beta', 'latest', '3.12', '3.8', '3.4', '2.18'];
 
 testEmberVersions.forEach(version => {
-  describe.skip(`basic registration in Ember version "${version}"`, function() {
+  describe(`basic registration in Ember version "${version}"`, function() {
     this.timeout(10000000);
     let app;
 
@@ -25,10 +25,14 @@ testEmberVersions.forEach(version => {
           pkg['ember-addon'] = pkg['ember-addon'] || {};
           pkg['ember-addon'].paths = pkg['ember-addon'].paths || [];
           pkg['ember-addon'].paths.push('lib/ember-service-worker-test');
+          delete pkg.devDependencies['ember-service-worker'];
         });
         return app.run('npm', 'install');
       }).then(() => {
         // https://github.com/tomdale/ember-cli-addon-tests/issues/176
+        app.editPackageJSON(pkg => {
+          pkg.devDependencies['ember-service-worker'] = '*';
+        });
         let addonPath = path.join(app.path, 'node_modules', 'ember-service-worker');
         fs.removeSync(addonPath);
         fs.ensureSymlinkSync(process.cwd(), addonPath);
