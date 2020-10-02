@@ -5,7 +5,7 @@ const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
 const path = require('path');
 const fs = require('fs-extra');
 
-describe('Fastboot compatibility', function() {
+describe.skip('Fastboot compatibility', function() {
   this.timeout(10000000);
   let app;
 
