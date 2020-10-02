@@ -25,27 +25,22 @@ testEmberVersions.forEach(version => {
           pkg['ember-addon'] = pkg['ember-addon'] || {};
           pkg['ember-addon'].paths = pkg['ember-addon'].paths || [];
           pkg['ember-addon'].paths.push('lib/ember-service-worker-test');
-          delete pkg.devDependencies['ember-service-worker'];
+          pkg['ember'] = pkg['ember'] || {};
+          pkg['ember'].edition = 'classic';
         });
         return app.run('npm', 'install');
-      }).then(() => {
-        // https://github.com/tomdale/ember-cli-addon-tests/issues/176
-        app.editPackageJSON(pkg => {
-          pkg.devDependencies['ember-service-worker'] = '*';
-        });
-        let addonPath = path.join(app.path, 'node_modules', 'ember-service-worker');
-        fs.removeSync(addonPath);
-        fs.ensureSymlinkSync(process.cwd(), addonPath);
-      }).then(() => {
-        return app.startServer({
-          detectServerStart(output) {
-            return output.indexOf('Serving on ') > -1;
-          }
-        });
+      })
+    });
+
+    beforeEach(() => {
+      return app.startServer({
+        detectServerStart(output) {
+          return output.indexOf('Serving on ') > -1;
+        }
       });
     });
 
-    after(function() {
+    afterEach(function() {
       return app.stopServer();
     });
 
