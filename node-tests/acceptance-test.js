@@ -5,7 +5,7 @@ const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
 const path = require('path');
 const fs = require('fs-extra');
 
-const testEmberVersions = ['beta', 'latest', '3.12', '3.8', '3.4', '2.18'];
+const testEmberVersions = ['latest']; // ['beta', 'latest', '3.12', '3.8', '3.4', '2.18'];
 
 testEmberVersions.forEach(version => {
   describe(`basic registration in Ember version "${version}"`, function() {
