@@ -8,7 +8,7 @@ const fs = require('fs-extra');
 const testEmberVersions = ['latest']; // ['beta', 'latest', '3.12', '3.8', '3.4', '2.18'];
 
 testEmberVersions.forEach(version => {
-  describe(`basic registration in Ember version "${version}"`, function() {
+  describe.skip(`basic registration in Ember version "${version}"`, function() {
     this.timeout(10000000);
     let app;
 
