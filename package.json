@@ -19,6 +19,7 @@
   "author": "Marten Schilstra <mail@martenschilstra.nl>",
   "license": "MIT",
   "devDependencies": {
+    "broccoli-plugin": "^4.0.3",
     "broccoli-test-helper": "^2.0.0",
     "chai": "^4.2.0",
     "denodeify": "^1.2.1",
