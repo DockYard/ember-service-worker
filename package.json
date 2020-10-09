@@ -7,6 +7,7 @@
     "test": "tests"
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "test": "mocha node-tests",
     "lint:js": "eslint ."
   },
@@ -25,6 +26,7 @@
     "ember-cli-addon-tests": "^0.11.1",
     "fs-extra": "^9.0.1",
     "mocha": "^6.2.2",
+    "npm-force-resolutions": "0.0.3",
     "request": "^2.88.0",
     "rimraf": "^3.0.0"
   },
@@ -45,6 +47,9 @@
     "glob": "^7.1.6",
     "hash-for-dep": "^1.5.1",
     "@rollup/plugin-replace": "2.3.0"
+  },
+  "resolutions": {
+    "clean-css": "4.2.1"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config",
