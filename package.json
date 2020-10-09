@@ -7,7 +7,6 @@
     "test": "tests"
   },
   "scripts": {
-    "preinstall": "npm-force-resolutions",
     "test": "mocha node-tests",
     "lint:js": "eslint ."
   },
