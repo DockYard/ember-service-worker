@@ -1,6 +1,6 @@
 {
   "name": "ember-service-worker",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "description": "A pluggable approach to Service Workers for Ember.js",
   "directories": {
     "doc": "doc",
