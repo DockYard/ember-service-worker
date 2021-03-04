@@ -139,4 +139,38 @@ describe('Service Worker Builder', () => {
         assert.equal(files[serviceWorkerFilename], expected);
       });
   });
+
+  it('uglifies the code when `ember-cli-terser` is enabled', () => {
+    let plugins = [generatePlugin('test-project', 'builder-test')];
+    return build({ 
+      app, 
+      plugins, 
+      serviceWorkerFilename, 
+      terserConfig: { enabled: true } 
+  }, 'service-worker')
+      .then((results) => {
+        let expected = '\n//# sourceMappingURL=sw.map';
+
+        let files = output.read();
+        assert.property(files, serviceWorkerFilename);
+        assert.equal(files[serviceWorkerFilename], expected);
+      });
+  });
+
+  it('uglifies the code when `ember-cli-terser` is enabled & takes custom terser config', () => {
+    let plugins = [generatePlugin('test-project', 'builder-test')];
+    return build({ 
+      app, 
+      plugins, 
+      serviceWorkerFilename, 
+      terserConfig: { enabled: true, terser: { sourceMap: false } } 
+  }, 'service-worker')
+      .then((results) => {
+        let expected = '';
+
+        let files = output.read();
+        assert.property(files, serviceWorkerFilename);
+        assert.equal(files[serviceWorkerFilename], expected);
+      });
+  });
 });

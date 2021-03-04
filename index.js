@@ -69,7 +69,8 @@ module.exports = {
     let serviceWorkerBuilder = new ServiceWorkerBuilder({
       app: this,
       appTree,
-      minifyJS: this.app.options.minifyJS,
+      minifyJS: this.app.options['ember-cli-terser'] ? undefined : this.app.options.minifyJS,
+      terserConfig: this.app.options['ember-cli-terser'],
       fingerprint: this.app.options.fingerprint.enabled,
       plugins,
       rootURL: this._getRootURL(),
