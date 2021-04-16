@@ -127,6 +127,50 @@ describe('Service Worker Builder', () => {
         assert.equal(files[serviceWorkerFilename], expected);
       });
   });
+
+  it('uses a custom root url when no serviceWorkerScope is passed', () => {
+    let plugins = [
+      generatePlugin('ember-service-worker', 'builder-test/rollup/scope-override/ember-service-worker'),
+    ];
+    return build({ app, plugins, rootURL: '/carrot/', serviceWorkerFilename }, 'service-worker-registration').then(() => {
+      let files = output.read();
+      let expected = `(function () {
+  'use strict';
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/carrot/sw.js', {
+      scope: '/carrot/'
+    });
+  }
+
+}());
+`;
+      assert.equal(files['sw-registration.js'], expected);
+    });
+  });
+
+  it('uses a default root url when no serviceWorkerScope is passed', () => {
+      let plugins = [
+        generatePlugin('ember-service-worker', 'builder-test/rollup/scope-override/ember-service-worker'),
+      ];
+      return build({ app, plugins, rootURL: '/', serviceWorkerFilename }, 'service-worker-registration').then(() => {
+        let files = output.read();
+        let expected = `(function () {
+  'use strict';
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', {
+      scope: '/'
+    });
+  }
+
+}());
+`;
+        assert.equal(files['sw-registration.js'], expected);
+      });
+    });
+
+
   it('overides root url when using serviceWorkerScope', () => {
     let plugins = [
       generatePlugin('ember-service-worker', 'builder-test/rollup/scope-override/ember-service-worker'),
