@@ -34,7 +34,7 @@ export function urlMatchesAnyPattern(url, patterns) {
 }
 
 export default {
-  createAbsoluteDomain,
+  createNormalizedUrl,
   createUrlRegEx,
   urlMatchesAnyPattern
 }

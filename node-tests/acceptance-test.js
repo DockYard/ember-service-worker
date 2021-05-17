@@ -2,8 +2,10 @@ const expect = require('chai').expect;
 const denodeify = require('denodeify');
 const request = denodeify(require('request'));
 const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
+const path = require('path');
+const fs = require('fs-extra');
 
-const testEmberVersions = ['beta', 'latest', '3.12', '3.8', '3.4', '2.18'];
+const testEmberVersions = ['latest']; // ['beta', 'latest', '3.12', '3.8', '3.4', '2.18'];
 
 testEmberVersions.forEach(version => {
   describe(`basic registration in Ember version "${version}"`, function() {
@@ -18,23 +20,27 @@ testEmberVersions.forEach(version => {
         fixturesPath: 'node-tests/fixtures',
         skipNpm: true
       })
-        .then(() => {
-          app.editPackageJSON(pkg => {
-            pkg['ember-addon'] = pkg['ember-addon'] || {};
-            pkg['ember-addon'].paths = pkg['ember-addon'].paths || [];
-            pkg['ember-addon'].paths.push('lib/ember-service-worker-test');
-          });
-          return app.run('npm', 'install');
-        }).then(() => {
-          return app.startServer({
-            detectServerStart(output) {
-              return output.indexOf('Serving on ') > -1;
-            }
-          });
+      .then(() => {
+        app.editPackageJSON(pkg => {
+          pkg['ember-addon'] = pkg['ember-addon'] || {};
+          pkg['ember-addon'].paths = pkg['ember-addon'].paths || [];
+          pkg['ember-addon'].paths.push('lib/ember-service-worker-test');
+          pkg['ember'] = pkg['ember'] || {};
+          pkg['ember'].edition = 'classic';
         });
+        return app.run('npm', 'install');
+      })
     });
 
-    after(function() {
+    beforeEach(() => {
+      return app.startServer({
+        detectServerStart(output) {
+          return output.indexOf('Serving on ') > -1;
+        }
+      });
+    });
+
+    afterEach(function() {
       return app.stopServer();
     });
 
