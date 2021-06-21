@@ -5,10 +5,9 @@ let ERROR_HANDLERS = [];
 
 if ('serviceWorker' in navigator) {
   if ('{{IGNORE_REGISTRATION}}' === 'true') {
-    return
-  }
-
-  navigator.serviceWorker.register('{{ROOT_URL}}{{SERVICE_WORKER_FILENAME}}', { scope: '{{ROOT_URL}}' })
+    console.log('registrationIgnored');
+  } else {
+    navigator.serviceWorker.register('{{ROOT_URL}}{{SERVICE_WORKER_FILENAME}}', { scope: '{{ROOT_URL}}' })
     .then(function(reg) {
       let current = Promise.resolve();
 
@@ -37,6 +36,7 @@ if ('serviceWorker' in navigator) {
           console.log('Service Worker registration failed with ' + error);
         });
     });
+  }
 }
 
 
