@@ -7,6 +7,8 @@ const writeFile = require('broccoli-file-creator');
 const hashForDep = require('hash-for-dep');
 const addonUtils = require('./lib/addon-utils');
 const IndexFile = require('./lib/index-file');
+const Funnel = require('broccoli-funnel');
+const path = require('path');
 
 module.exports = {
   name: 'ember-service-worker',
@@ -54,12 +56,32 @@ module.exports = {
   },
 
   postprocessTree(type, appTree) {
-    let options = this._getOptions();
-
-    if (type !== 'all' || options.enabled === false) {
+    if (type !== 'all') {
       return appTree;
     }
+    return this._addServiceWorker(appTree);
+  },
+  
+  /**
+   * This function is *not* called by ember-cli directly, but supposed to be imported by an app to wrap the app's
+   * tree, to add the prerendered HTML files. This workaround is currently needed for Embroider-based builds that
+   * don't support the `postprocessTree('all', tree)` hook used here.
+   */
+   addServiceWorker(app, tree) {
+    let swAddon = app.project.addons.find(({ name }) => name === 'ember-service-worker');
 
+    if (!swAddon) {
+      throw new Error('Could not find initialized ember-service-worker addon. It must be part of your app\'s dependencies!');
+    }
+
+    return swAddon._addSW(tree);
+  },
+
+  _addServiceWorker(appTree) {
+    let options = this._getOptions();
+    if (options.enabled === false) {
+      return appTree;
+    }
     let plugins = this._findPluginsFor(this.project);
 
     // Add the project itself as a possible plugin, this way user can add custom
@@ -93,7 +115,7 @@ module.exports = {
       serviceWorkerRegistrationTree
     ], { overwrite: true });
   },
-
+  
   contentFor(type, config) {
     let options = this._getOptions();
 
@@ -124,9 +146,10 @@ module.exports = {
   },
 
   treeForServiceWorker(swTree, appTree) {
+    console.log('**** SW treeForServiceWorker', !!swTree, !!appTree);
     var options = this._getOptions();
     options.projectVersion = this.project.pkg.version;
-
+    console.log('**** SW treeForServiceWorker project root', this.project.root);
     try {
       options.projectRevision = hashForDep(this.project.root);
     } catch (e) {
