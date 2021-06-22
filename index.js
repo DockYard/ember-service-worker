@@ -66,6 +66,8 @@ module.exports = {
    * This function is *not* called by ember-cli directly, but supposed to be imported by an app to wrap the app's
    * tree, to add the prerendered HTML files. This workaround is currently needed for Embroider-based builds that
    * don't support the `postprocessTree('all', tree)` hook used here.
+   * 
+   * Inspired from: https://github.com/ef4/prember/issues/59#issuecomment-723255752
    */
    addServiceWorker(app, tree) {
     let swAddon = app.project.addons.find(({ name }) => name === 'ember-service-worker');
