@@ -126,7 +126,7 @@ module.exports = {
 
     if (type === 'body-footer') {
       if (options.registrationStrategy === 'default') {
-        return `<script src="${this._getRootURL()}${srcPath}"></script>`;
+        return `<script data-embroider-ignore src="${this._getRootURL()}${srcPath}"></script>`;
       }
 
       if (options.registrationStrategy === 'inline') {
@@ -135,7 +135,7 @@ module.exports = {
     }
 
     if (type === 'head-footer' && options.registrationStrategy === 'async') {
-      return `<script async src="${this._getRootURL()}${srcPath}"></script>`;
+      return `<script data-embroider-ignore async src="${this._getRootURL()}${srcPath}"></script>`;
     }
   },
 
