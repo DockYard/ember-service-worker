@@ -53,13 +53,30 @@ module.exports = {
     `);
   },
 
-  postprocessTree(type, appTree) {
-    let options = this._getOptions();
+  buildServiceWorker(app, tree) {
+    let eswAddon = app.project.addons.find(
+      ({ name }) => name === 'ember-service-worker'
+    );
 
+    if (!eswAddon) {
+      throw new Error(
+        "Could not find initialized ember-service-worker addon. It must be part of your app's dependencies!"
+      );
+    }
+
+    return eswAddon._postprocessTree(tree);
+  },
+
+  postprocessTree(type, appTree) {
     if (type !== 'all' || options.enabled === false) {
       return appTree;
     }
 
+    return this._postprocessTree(tree);
+  },
+
+  _postprocessTree(appTree) {
+    let options = this._getOptions();
     let plugins = this._findPluginsFor(this.project);
 
     // Add the project itself as a possible plugin, this way user can add custom
@@ -109,7 +126,7 @@ module.exports = {
 
     if (type === 'body-footer') {
       if (options.registrationStrategy === 'default') {
-        return `<script src="${this._getRootURL()}${srcPath}"></script>`;
+        return `<script data-embroider-ignore src="${this._getRootURL()}${srcPath}"></script>`;
       }
 
       if (options.registrationStrategy === 'inline') {
@@ -118,7 +135,7 @@ module.exports = {
     }
 
     if (type === 'head-footer' && options.registrationStrategy === 'async') {
-      return `<script async src="${this._getRootURL()}${srcPath}"></script>`;
+      return `<script data-embroider-ignore async src="${this._getRootURL()}${srcPath}"></script>`;
     }
   },
 
